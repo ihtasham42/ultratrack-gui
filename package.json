@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@mantine/core": "^7.2.2",
+    "@mantine/dropzone": "^7.2.2",
     "@reduxjs/toolkit": "^1.9.7",
+    "@tabler/icons-react": "^2.40.0",
     "postcss": "^8.4.31",
     "postcss-preset-mantine": "^1.11.0",
     "postcss-simple-vars": "^7.0.1",

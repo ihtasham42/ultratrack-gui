@@ -1,13 +1,12 @@
-import React from "react";
-import { Button, SegmentedControl } from "@mantine/core";
+import { Box } from "@mantine/core";
+import UploadRegion from "./features/video/UploadRegion";
+import VideoContainer from "./features/video/VideoContainer";
 
 const App = () => {
   return (
-    <div>
-      <div> hello</div>
-      <Button>Test</Button> 
-      <SegmentedControl data={['React', 'Angular', 'Vue']} />
-    </div>
+    <Box>
+      <VideoContainer />
+    </Box>
   );
 };
 
