@@ -1,6 +1,6 @@
 import { Box } from "@mantine/core";
 import { useAppSelector } from "../../common/hooks";
-import VideoSlider from "./VideoSlider";
+import VideoFooter from "./VideoFooter";
 
 const VideoDisplay = () => {
   const { source } = useAppSelector((state) => state.video);
@@ -12,7 +12,7 @@ const VideoDisplay = () => {
           Your browser does not support the video tag.
         </video>
       </Box>
-      <VideoSlider />
+      <VideoFooter />
     </Box>
   );
 };

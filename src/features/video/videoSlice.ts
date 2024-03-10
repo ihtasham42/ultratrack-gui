@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { VideoMetadata, VideoPlaybackState } from "./videoModels";
-import { fromFrameToSeconds } from "./videoUtils";
+import { fromFrameToTime } from "./videoUtils";
 
 interface VideoState {
   source?: string;
@@ -21,6 +21,19 @@ const initialState: VideoState = {
   metadata: undefined,
 };
 
+const setCurrentTime = (state: VideoState, time: number) => {
+  if (state.metadata) {
+    const {duration } = state.metadata
+
+    if (time < 0) {
+      time = 0
+    } else if (time > duration) {
+      time = duration
+    }
+    state.metadata.currentTime = time
+  }
+}
+
 export const videoSlice = createSlice({
   name: "video",
   initialState,
@@ -37,19 +50,23 @@ export const videoSlice = createSlice({
     },
     stepForward: (state) => {
       if (state.metadata) {
-        state.metadata.currentTime += fromFrameToSeconds(1);
+        const {currentTime} = state.metadata
+
+        setCurrentTime(state, currentTime + fromFrameToTime(1))
       }
     },
     stepBackward: (state) => {
       if (state.metadata) {
-        state.metadata.currentTime -= fromFrameToSeconds(1);
+        const {currentTime} = state.metadata
+
+        setCurrentTime(state, currentTime - fromFrameToTime(1))
       }
     },
-    setCurrentTime: (state, action: PayloadAction<SetCurrentTimePayload>) => {
+    jumpToTime: (state, action: PayloadAction<SetCurrentTimePayload>) => {
       if (state.metadata) {
         const {time} = action.payload
 
-        state.metadata.currentTime = time
+        setCurrentTime(state, time)
       }
     },
     playVideo: (state) => {
