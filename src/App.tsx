@@ -1,11 +1,12 @@
-import { Box } from "@mantine/core";
-import UploadRegion from "./features/video/UploadRegion";
+import { Box, Container } from "@mantine/core";
 import VideoContainer from "./features/video/VideoContainer";
 
 const App = () => {
   return (
     <Box>
-      <VideoContainer />
+      <Container size="xl" py="lg">
+        <VideoContainer />
+      </Container>
     </Box>
   );
 };

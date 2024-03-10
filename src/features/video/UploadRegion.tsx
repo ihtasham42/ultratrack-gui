@@ -1,15 +1,31 @@
 import { Group, Text, rem } from "@mantine/core";
-import { Dropzone } from "@mantine/dropzone";
-import { IconPhoto, IconUpload, IconVideo, IconX } from "@tabler/icons-react";
+import { Dropzone, FileWithPath } from "@mantine/dropzone";
+import { IconUpload, IconVideo, IconX } from "@tabler/icons-react";
+import { uploadVideo } from "./videoSlice";
+import { useAppDispatch } from "../../common/hooks";
 
-type Props = {};
+const UploadRegion = () => {
+  const dispatch = useAppDispatch();
 
-const UploadRegion = (props: Props) => {
+  const handleUpload = (files: FileWithPath[]) => {
+    const file = files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+
+      const video = document.createElement("video");
+      video.src = url;
+      video.addEventListener("loadedmetadata", () => {
+        const duration = video.duration;
+        console.log(duration);
+        dispatch(uploadVideo({ source: url, duration }));
+      });
+    }
+  };
+
   return (
     <Dropzone
-      onDrop={(files) => console.log("accepted files", files)}
+      onDrop={handleUpload}
       onReject={(files) => console.log("rejected files", files)}
-      maxSize={3 * 1024 ** 2}
       accept={undefined}
     >
       <Group

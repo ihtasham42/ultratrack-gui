@@ -1,17 +1,19 @@
-import { ActionIcon, Group, Slider } from "@mantine/core";
+import { ActionIcon, Group, Slider, TextInput } from "@mantine/core";
 import {
   IconChevronLeft,
   IconChevronRight,
   IconPlayerPlay,
 } from "@tabler/icons-react";
+import { useAppSelector } from "../../common/hooks";
 
-type Props = {};
+const VideoSlider = () => {
+  const { duration } = useAppSelector((state) => state.video.metadata);
 
-const VideoSlider = (props: Props) => {
   return (
-    <Group>
-      <Slider style={{ flex: 1 }} color="blue" />{" "}
-      <Group gap={8}>
+    <Group align="center">
+      <Slider style={{ flex: 1 }} color="blue" />
+
+      <Group gap="xs">
         <ActionIcon>
           <IconChevronLeft />
         </ActionIcon>
@@ -21,6 +23,7 @@ const VideoSlider = (props: Props) => {
         <ActionIcon>
           <IconChevronRight />
         </ActionIcon>
+        <TextInput size="xs" w={70} rightSection="/30" />
       </Group>
     </Group>
   );
