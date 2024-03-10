@@ -1,7 +1,7 @@
 import { FRAME_RATE } from "./videoModels"
 
 export const fromFrameToTime = (frame: number) => {
-    return Math.ceil(frame / FRAME_RATE)
+    return frame / FRAME_RATE
 }
 
 export const fromTimeToFrame = (seconds: number) => {

@@ -8,7 +8,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import { fromTimeToFrame } from "./videoUtils";
 import { VideoPlaybackState } from "./videoModels";
-import { pauseVideo, playVideo } from "./videoSlice";
+import { pauseVideo, playVideo, stepBackward, stepForward } from "./videoSlice";
 
 const VideoControls = () => {
   const { metadata } = useAppSelector((state) => state.video);
@@ -31,16 +31,24 @@ const VideoControls = () => {
     }
   };
 
+  const handleStepForward = () => {
+    dispatch(stepForward());
+  };
+
+  const handleStepBackward = () => {
+    dispatch(stepBackward());
+  };
+
   return (
     <Group gap="xs">
-      <ActionIcon>
+      <ActionIcon onClick={handleStepBackward}>
         <IconChevronLeft />
       </ActionIcon>
       <ActionIcon onClick={handlePlaybackStateChange}>
         {playbackState === VideoPlaybackState.PLAYING && <IconPlayerPause />}
         {playbackState === VideoPlaybackState.PAUSED && <IconPlayerPlay />}
       </ActionIcon>
-      <ActionIcon>
+      <ActionIcon onClick={handleStepForward}>
         <IconChevronRight />
       </ActionIcon>
       <TextInput
