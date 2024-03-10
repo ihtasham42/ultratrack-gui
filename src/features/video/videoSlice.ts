@@ -82,6 +82,6 @@ export const videoSlice = createSlice({
   },
 });
 
-export const { uploadVideo } = videoSlice.actions;
+export const { uploadVideo, playVideo, pauseVideo, stepForward, stepBackward, jumpToTime } = videoSlice.actions;
 
 export default videoSlice.reducer;
