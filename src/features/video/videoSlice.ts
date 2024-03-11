@@ -12,6 +12,9 @@ interface UploadVideoPayload {
   duration: number;
 }
 
+interface UpdateCurrentTimePayload {
+  time: number
+}
 interface SetCurrentTimePayload  {
   time: number;
 }
@@ -27,8 +30,9 @@ const setCurrentTime = (state: VideoState, time: number) => {
 
     if (time < 0) {
       time = 0
-    } else if (time > duration) {
+    } else if (time >= duration) {
       time = duration
+      state.metadata.playbackState = VideoPlaybackState.PAUSED
     }
     state.metadata.currentTime = time
   }
@@ -78,10 +82,17 @@ export const videoSlice = createSlice({
       if (state.metadata) {
         state.metadata.playbackState = VideoPlaybackState.PAUSED
       }
+    },
+    updateCurrentTime: (state, action: PayloadAction<UpdateCurrentTimePayload>) => {
+      if (state.metadata) {
+        const { time } = action.payload
+        
+        setCurrentTime(state, time)
+      }
     }
   },
 });
 
-export const { uploadVideo, playVideo, pauseVideo, stepForward, stepBackward, jumpToTime } = videoSlice.actions;
+export const { uploadVideo, playVideo, pauseVideo, stepForward, stepBackward, jumpToTime, updateCurrentTime } = videoSlice.actions;
 
 export default videoSlice.reducer;
