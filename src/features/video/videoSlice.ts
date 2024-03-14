@@ -42,7 +42,7 @@ export const videoSlice = createSlice({
   name: "video",
   initialState,
   reducers: {
-  uploadVideo: (state, action: PayloadAction<UploadVideoPayload>) => {
+    uploadVideo: (state, action: PayloadAction<UploadVideoPayload>) => {
       const { source, duration } = action.payload;
 
       state.source = source;

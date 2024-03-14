@@ -22,9 +22,8 @@ const VideoSlider = () => {
     return null;
   }
 
-  const { currentTime, duration } = metadata;
+  const { duration } = metadata;
 
-  const currentFrame = fromTimeToFrame(currentTime);
   const maxFrame = fromTimeToFrame(duration);
 
   const handleValueChange = (newValue: number) => {

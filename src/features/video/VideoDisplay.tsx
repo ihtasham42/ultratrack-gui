@@ -29,7 +29,13 @@ const VideoDisplay = () => {
   const handleTimeUpdate = () => {
     const video = videoRef.current;
 
-    if (!video) {
+    if (!video || !metadata) {
+      return;
+    }
+
+    const { playbackState } = metadata;
+
+    if (playbackState === VideoPlaybackState.PAUSED) {
       return;
     }
 
@@ -64,7 +70,7 @@ const VideoDisplay = () => {
     return;
   }
 
-  const { playbackState, currentTime } = metadata;
+  const { currentTime } = metadata;
 
   return (
     <Box>

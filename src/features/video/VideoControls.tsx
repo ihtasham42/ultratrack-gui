@@ -8,7 +8,13 @@ import {
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import { fromTimeToFrame } from "./videoUtils";
 import { VideoPlaybackState } from "./videoModels";
-import { pauseVideo, playVideo, stepBackward, stepForward } from "./videoSlice";
+import {
+  pauseVideo,
+  playVideo,
+  stepBackward,
+  stepForward,
+  updateCurrentTime,
+} from "./videoSlice";
 
 const VideoControls = () => {
   const { metadata } = useAppSelector((state) => state.video);
@@ -39,6 +45,14 @@ const VideoControls = () => {
     dispatch(stepBackward());
   };
 
+  const handleNumberInputEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.currentTarget && e.key === "Enter") {
+      const payload = { time: parseFloat(e.currentTarget.value) };
+
+      dispatch(updateCurrentTime(payload));
+    }
+  };
+
   return (
     <Group gap="xs">
       <ActionIcon onClick={handleStepBackward}>
@@ -56,6 +70,7 @@ const VideoControls = () => {
         size="xs"
         w={100}
         value={currentFrame}
+        onKeyDown={handleNumberInputEnter}
         rightSection={" /" + maxFrame.toString()}
       />
     </Group>
