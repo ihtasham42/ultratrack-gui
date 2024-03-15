@@ -36,3 +36,7 @@ export const fascicleSlice = createSlice({
         }
     }
 })
+
+export const {setComputedFascicleLengths} = fascicleSlice.actions
+
+export default fascicleSlice.reducer

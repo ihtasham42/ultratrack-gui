@@ -70,6 +70,7 @@ const VideoControls = () => {
         size="xs"
         w={100}
         value={currentFrame}
+        onChange={() => {}}
         onKeyDown={handleNumberInputEnter}
         rightSection={" /" + maxFrame.toString()}
       />

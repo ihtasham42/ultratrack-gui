@@ -16,7 +16,7 @@ const UploadRegion = () => {
       video.src = url;
       video.addEventListener("loadedmetadata", () => {
         const duration = video.duration;
-        console.log(duration);
+
         dispatch(uploadVideo({ source: url, duration }));
       });
     }

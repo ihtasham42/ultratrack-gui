@@ -4,6 +4,7 @@ import VideoFooter from "./VideoFooter";
 import { useEffect, useRef } from "react";
 import { VideoPlaybackState } from "./videoModels";
 import { updateCurrentTime } from "./videoSlice";
+import CanvasDisplay from "./CanvasDisplay";
 
 const VideoDisplay = () => {
   const { source, metadata } = useAppSelector((state) => state.video);
@@ -73,11 +74,22 @@ const VideoDisplay = () => {
   const { currentTime } = metadata;
 
   return (
-    <Box>
+    <Box style={{ position: "relative", width: "100%" }}>
       <Box>
         <video src={source} ref={videoRef} width="100%">
           Your browser does not support the video tag.
         </video>
+      </Box>
+      <Box
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <CanvasDisplay />
       </Box>
       <VideoFooter />
     </Box>
