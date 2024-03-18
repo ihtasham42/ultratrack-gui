@@ -11,13 +11,15 @@ const UploadRegion = () => {
     const file = files[0];
     if (file) {
       const url = URL.createObjectURL(file);
+      const name = file.name;
 
       const video = document.createElement("video");
       video.src = url;
+
       video.addEventListener("loadedmetadata", () => {
         const duration = video.duration;
 
-        dispatch(uploadVideo({ source: url, duration }));
+        dispatch(uploadVideo({ source: url, duration, name }));
       });
     }
   };

@@ -2,8 +2,13 @@ import { useEffect, useRef } from "react";
 import { useAppSelector } from "../../common/hooks";
 import { fromTimeToFrame } from "./videoUtils";
 
+const FASCICLE_LENGTH_END_SQUARE_SIZE = 12;
+const FASCICLE_LENGTH_LINE_WIDTH = 4;
+
 const CanvasDisplay = () => {
-  const { computedFascicleLengths } = useAppSelector((state) => state.fascicle);
+  const { computedFascicleLengths, colorMapping } = useAppSelector(
+    (state) => state.fascicle
+  );
   const { metadata } = useAppSelector((state) => state.video);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -29,30 +34,29 @@ const CanvasDisplay = () => {
       x1: number,
       y1: number,
       x2: number,
-      y2: number
+      y2: number,
+      color: string
     ) => {
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
-      ctx.strokeStyle = "red";
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = FASCICLE_LENGTH_LINE_WIDTH;
       ctx.stroke();
 
-      const squareSize = 6;
-
-      ctx.fillStyle = "red";
+      ctx.fillStyle = color;
       ctx.fillRect(
-        x1 - squareSize / 2,
-        y1 - squareSize / 2,
-        squareSize,
-        squareSize
+        x1 - FASCICLE_LENGTH_END_SQUARE_SIZE / 2,
+        y1 - FASCICLE_LENGTH_END_SQUARE_SIZE / 2,
+        FASCICLE_LENGTH_END_SQUARE_SIZE,
+        FASCICLE_LENGTH_END_SQUARE_SIZE
       );
 
       ctx.fillRect(
-        x2 - squareSize / 2,
-        y2 - squareSize / 2,
-        squareSize,
-        squareSize
+        x2 - FASCICLE_LENGTH_END_SQUARE_SIZE / 2,
+        y2 - FASCICLE_LENGTH_END_SQUARE_SIZE / 2,
+        FASCICLE_LENGTH_END_SQUARE_SIZE,
+        FASCICLE_LENGTH_END_SQUARE_SIZE
       );
     };
 
@@ -63,9 +67,9 @@ const CanvasDisplay = () => {
     }
 
     fascicleLengthFrame.forEach((fascicleLength) => {
-      const { point1, point2 } = fascicleLength;
-      console.log("draw at", point1, point2);
-      drawFascicleLength(point1.x, point1.y, point2.x, point2.y);
+      const { point1, point2, sampleId } = fascicleLength;
+      const color = colorMapping[sampleId];
+      drawFascicleLength(point1.x, point1.y, point2.x, point2.y, color);
     });
   }, [metadata]);
 

@@ -10,6 +10,7 @@ interface VideoState {
 interface UploadVideoPayload {
   source: string;
   duration: number;
+  name: string;
 }
 
 interface UpdateCurrentTimePayload {
@@ -43,13 +44,14 @@ export const videoSlice = createSlice({
   initialState,
   reducers: {
     uploadVideo: (state, action: PayloadAction<UploadVideoPayload>) => {
-      const { source, duration } = action.payload;
+      const { source, duration, name } = action.payload;
 
       state.source = source;
       state.metadata = {
         duration,
         currentTime: 0,
         playbackState: VideoPlaybackState.PAUSED,
+        name
       };
     },
     stepForward: (state) => {

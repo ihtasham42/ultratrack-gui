@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box, Flex } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import VideoFooter from "./VideoFooter";
 import { useEffect, useRef } from "react";
@@ -10,6 +10,14 @@ const VideoDisplay = () => {
   const { source, metadata } = useAppSelector((state) => state.video);
   const videoRef = useRef<HTMLVideoElement>(null);
   const dispatch = useAppDispatch();
+  const playbackState = metadata?.playbackState;
+  const currentTime = metadata?.currentTime;
+
+  const playbackStateRef = useRef(playbackState);
+
+  useEffect(() => {
+    playbackStateRef.current = playbackState;
+  }, [playbackState]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -18,14 +26,29 @@ const VideoDisplay = () => {
       return;
     }
 
-    const { playbackState } = metadata;
-
     if (playbackState === VideoPlaybackState.PLAYING) {
       video.play();
     } else if (playbackState === VideoPlaybackState.PAUSED) {
       video.pause();
     }
-  }, [metadata]);
+  }, [playbackState]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !metadata) {
+      return;
+    }
+
+    // Convert both times to a fixed precision to avoid floating point issues.
+    const videoTime = parseFloat(video.currentTime.toFixed(3));
+    const targetTime = parseFloat(metadata.currentTime.toFixed(3));
+
+    // Only update the video's currentTime if it differs from the targetTime.
+    // Adjust the precision as needed for your use case.
+    if (Math.abs(videoTime - targetTime) > 0.01) {
+      video.currentTime = metadata.currentTime;
+    }
+  }, [currentTime]);
 
   const handleTimeUpdate = () => {
     const video = videoRef.current;
@@ -34,9 +57,7 @@ const VideoDisplay = () => {
       return;
     }
 
-    const { playbackState } = metadata;
-
-    if (playbackState === VideoPlaybackState.PAUSED) {
+    if (playbackStateRef.current === VideoPlaybackState.PAUSED) {
       return;
     }
 
@@ -44,9 +65,7 @@ const VideoDisplay = () => {
       time: video.currentTime,
     };
 
-    if (Math.abs(video.currentTime - currentTime) > 0.5) {
-      dispatch(updateCurrentTime(payload));
-    }
+    dispatch(updateCurrentTime(payload));
   };
 
   useEffect(() => {
@@ -56,25 +75,26 @@ const VideoDisplay = () => {
       return;
     }
 
-    const { currentTime } = metadata;
-
     video.addEventListener("timeupdate", handleTimeUpdate);
-
-    video.currentTime = currentTime;
 
     return () => {
       video.removeEventListener("timeupdate", handleTimeUpdate);
     };
-  }, [metadata]);
+  }, [source]);
 
   if (!source || !metadata) {
     return;
   }
 
-  const { currentTime } = metadata;
+  const { name } = metadata;
 
   return (
     <Box style={{ position: "relative", width: "100%" }}>
+      <Box w="100%" ta="center" mb="md">
+        <Flex justify="center">
+          <div>{name}</div>
+        </Flex>
+      </Box>
       <Box>
         <video src={source} ref={videoRef} width="100%">
           Your browser does not support the video tag.
