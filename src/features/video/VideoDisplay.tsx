@@ -39,48 +39,46 @@ const VideoDisplay = () => {
       return;
     }
 
-    // Convert both times to a fixed precision to avoid floating point issues.
     const videoTime = parseFloat(video.currentTime.toFixed(3));
     const targetTime = parseFloat(metadata.currentTime.toFixed(3));
 
-    // Only update the video's currentTime if it differs from the targetTime.
-    // Adjust the precision as needed for your use case.
     if (Math.abs(videoTime - targetTime) > 0.01) {
       video.currentTime = metadata.currentTime;
     }
   }, [currentTime]);
 
-  const handleTimeUpdate = () => {
-    const video = videoRef.current;
-
-    if (!video || !metadata) {
-      return;
-    }
-
-    if (playbackStateRef.current === VideoPlaybackState.PAUSED) {
-      return;
-    }
-
-    const payload = {
-      time: video.currentTime,
-    };
-
-    dispatch(updateCurrentTime(payload));
-  };
-
   useEffect(() => {
     const video = videoRef.current;
-
-    if (!video || !metadata) {
+    if (!video) {
       return;
     }
 
-    video.addEventListener("timeupdate", handleTimeUpdate);
+    let lastTime = -1;
+    let animationFrameId: number;
+
+    const frame = () => {
+      if (!video) return;
+
+      const currentTime = video.currentTime;
+
+      if (Math.abs(currentTime - lastTime) >= 0.03) {
+        lastTime = currentTime;
+
+        const payload = {
+          time: currentTime,
+        };
+        dispatch(updateCurrentTime(payload));
+      }
+
+      animationFrameId = requestAnimationFrame(frame);
+    };
+
+    animationFrameId = requestAnimationFrame(frame);
 
     return () => {
-      video.removeEventListener("timeupdate", handleTimeUpdate);
+      cancelAnimationFrame(animationFrameId);
     };
-  }, [source]);
+  }, [source, dispatch]);
 
   if (!source || !metadata) {
     return;
