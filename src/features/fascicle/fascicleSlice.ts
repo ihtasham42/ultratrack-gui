@@ -1,12 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { FascicleLength, FascicleLengthFrame, FascicleLengthFrames} from "./fascicleModels"
+import {  FascicleLengthFrame, FascicleLengthFrames} from "./fascicleModels"
 
 
 
 interface FascicleState {
     computedFascicleLengths: FascicleLengthFrames
     sampleFasicleLengths: FascicleLengthFrame
-    colorMapping: Record<string, string>
 }
 
 interface SetComputedFascicleLengthsPayload {
@@ -59,11 +58,6 @@ const initialState: FascicleState = {
     // },
     computedFascicleLengths: mockComputed,
     sampleFasicleLengths: [],
-    colorMapping: {
-        "1": "red",
-        "2": "blue",
-        "3": "green"
-    }
 }
 
 export const fascicleSlice = createSlice({

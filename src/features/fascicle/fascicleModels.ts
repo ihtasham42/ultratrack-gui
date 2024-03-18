@@ -12,3 +12,15 @@ export interface FascicleLengthPoint {
 export type FascicleLengthFrame = FascicleLength[]
 
 export type FascicleLengthFrames = Record<number, FascicleLengthFrame>
+
+export type FascicleLengthChartDataItem = Record<string, number> 
+
+export type FascicleLengthChartData = Array<FascicleLengthChartDataItem> 
+
+export const fasicleLengthColors: Record<string, string> = {
+    "1": "red",
+    "2": "blue",
+    "3": "green",
+    "4": "purple",
+    "5": "orange"
+}

@@ -1,4 +1,4 @@
-import { Box, Flex } from "@mantine/core";
+import { Box, Paper, Text } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import VideoFooter from "./VideoFooter";
 import { useEffect, useRef } from "react";
@@ -88,11 +88,9 @@ const VideoDisplay = () => {
 
   return (
     <Box style={{ position: "relative", width: "100%" }}>
-      <Box w="100%" ta="center" mb="md">
-        <Flex justify="center">
-          <div>{name}</div>
-        </Flex>
-      </Box>
+      <Paper w="100%" ta="center" mb="sm" bg="blue" p={1}>
+        <Text c="white">{name}</Text>
+      </Paper>
       <Box>
         <video src={source} ref={videoRef} width="100%">
           Your browser does not support the video tag.

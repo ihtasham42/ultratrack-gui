@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useAppSelector } from "../../common/hooks";
 import { fromTimeToFrame } from "./videoUtils";
+import { getFascicleLengthColor } from "../fascicle/fascicleUtils";
 
 const FASCICLE_LENGTH_END_SQUARE_SIZE = 12;
 const FASCICLE_LENGTH_LINE_WIDTH = 4;
@@ -68,7 +69,7 @@ const CanvasDisplay = () => {
 
     fascicleLengthFrame.forEach((fascicleLength) => {
       const { point1, point2, sampleId } = fascicleLength;
-      const color = colorMapping[sampleId];
+      const color = getFascicleLengthColor(sampleId);
       drawFascicleLength(point1.x, point1.y, point2.x, point2.y, color);
     });
   }, [metadata]);
