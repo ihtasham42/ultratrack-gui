@@ -14,7 +14,7 @@ interface SetComputedFascicleLengthsPayload {
 
 const mockComputed: FascicleLengthFrames = {}
 
-for (let i = 0; i <= 117; i++) {
+for (let i = 0; i <= 350; i++) {
     const frame = [
         {
             sampleId: "1",
@@ -57,7 +57,23 @@ const initialState: FascicleState = {
     //     ]
     // },
     computedFascicleLengths: mockComputed,
-    sampleFasicleLengths: [],
+    sampleFasicleLengths: [
+            {
+                sampleId: "1",
+                point1: {x: 200, y: 300},
+                point2: {x: 400, y: 500}
+            },
+            {
+                sampleId: "2",
+                point1: {x: 200, y: 300},
+                point2: {x: 400, y: 500}
+            },
+            {
+                sampleId: "3",
+                point1: {x: 200, y: 300},
+                point2: {x: 400, y: 500}
+            }
+    ],
 }
 
 export const fascicleSlice = createSlice({

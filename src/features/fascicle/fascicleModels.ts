@@ -13,7 +13,7 @@ export type FascicleLengthFrame = FascicleLength[]
 
 export type FascicleLengthFrames = Record<number, FascicleLengthFrame>
 
-export type FascicleLengthChartDataItem = Record<string, number> 
+export type FascicleLengthChartDataItem = Record<string, number | string> 
 
 export type FascicleLengthChartData = Array<FascicleLengthChartDataItem> 
 
