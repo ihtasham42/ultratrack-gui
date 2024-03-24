@@ -54,24 +54,6 @@ export const toFascicleLengthChartData = (
       color: getFascicleLengthColor(sampleId),
     };
   });
-  // return Object.entries(frames).map(([frameNumber, frame]) => {
-  //     const seriesItem = {
-  //         name: frameNumber,
-  //         type: "line",
-  //         data: frame.map(({point1, point2}) => getDistanceBetweenPoints(point1, point2))
-  //         color: getFascicleLengthColor(frameN)
-  //     }
-  // })
-
-  // return Object.entries(frames).map(([frameNumber, frame]) => {
-  //     const chartDataItem: FascicleLengthChartDataItem = {
-  //         frame: frameNumber
-  //     }
-
-  //     frame.forEach(({sampleId, point1, point2}) => {chartDataItem[sampleId] = getDistanceBetweenPoints(point1, point2)})
-
-  //     return chartDataItem
-  // })
 };
 
 export const getChartSeries = (frame: FascicleLengthFrame) => {

@@ -3,6 +3,7 @@ import { computeChartOptions } from "./statisticsService";
 import { useAppSelector } from "../../common/hooks";
 import ReactECharts from "echarts-for-react";
 import { fromTimeToFrame } from "../video/videoUtils";
+import { getSampleFascicleLengthIds } from "../fascicle/fascicleUtils";
 
 const Chart = () => {
   const { computedFascicleLengths, sampleFasicleLengths } = useAppSelector(
@@ -17,7 +18,7 @@ const Chart = () => {
 
   const { currentTime, duration } = metadata;
 
-  const sampleIds = sampleFasicleLengths.map(({ sampleId }) => sampleId);
+  const sampleIds = getSampleFascicleLengthIds(sampleFasicleLengths);
 
   const chartOptions = computeChartOptions(
     computedFascicleLengths,
@@ -30,6 +31,7 @@ const Chart = () => {
 
     chartOptions.series[0].markLine = {
       silent: true,
+      animation: false,
       data: [
         {
           xAxis: currentFrame,
@@ -45,8 +47,6 @@ const Chart = () => {
       },
     };
   }
-
-  console.log(chartOptions);
 
   return (
     <Box>
