@@ -63,7 +63,7 @@ export const getChartSeries = (frame: FascicleLengthFrame) => {
   }));
 };
 
-const getDistanceBetweenPoints = (
+export const getDistanceBetweenPoints = (
   point1: FascicleLengthPoint,
   point2: FascicleLengthPoint
 ) => {

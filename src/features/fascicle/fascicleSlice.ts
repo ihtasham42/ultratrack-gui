@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { FascicleLengthFrame, FascicleLengthFrames } from "./fascicleModels";
+import { FascicleLengthFrames } from "./fascicleModels";
 
 interface FascicleState {
   computedFascicleLengths: FascicleLengthFrames;
-  sampleFasicleLengths: FascicleLengthFrames;
+  sampleFascicleLengths: FascicleLengthFrames;
 }
 
 interface SetComputedFascicleLengthsPayload {
@@ -55,7 +55,7 @@ const initialState: FascicleState = {
   //     ]
   // },
   computedFascicleLengths: mockComputed,
-  sampleFasicleLengths: {
+  sampleFascicleLengths: {
     "1": [
       {
         sampleId: "1",

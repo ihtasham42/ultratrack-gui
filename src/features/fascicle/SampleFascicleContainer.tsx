@@ -1,9 +1,13 @@
 import { Card, Title } from "@mantine/core";
+import SampleFascicleEntries from "./SampleFascicleEntries";
 
 const SampleFascicleContainer = () => {
   return (
     <Card withBorder>
-      <Title order={5}>Set Up Tracking</Title>
+      <Title mb="sm" order={5}>
+        Sample Fascicle Lengths
+      </Title>
+      <SampleFascicleEntries />
     </Card>
   );
 };

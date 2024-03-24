@@ -3,10 +3,10 @@ import { computeChartOptions } from "./statisticsService";
 import { useAppSelector } from "../../common/hooks";
 import ReactECharts from "echarts-for-react";
 import { fromTimeToFrame } from "../video/videoUtils";
-import { getSampleFascicleLengthIds } from "../fascicle/fascicleUtils";
+import { getFlattenedSampleFascicleLengths } from "../fascicle/fascicleUtils";
 
 const Chart = () => {
-  const { computedFascicleLengths, sampleFasicleLengths } = useAppSelector(
+  const { computedFascicleLengths, sampleFascicleLengths } = useAppSelector(
     (state) => state.fascicle
   );
 
@@ -18,7 +18,9 @@ const Chart = () => {
 
   const { currentTime, duration } = metadata;
 
-  const sampleIds = getSampleFascicleLengthIds(sampleFasicleLengths);
+  const sampleIds = getFlattenedSampleFascicleLengths(
+    sampleFascicleLengths
+  ).map(({ sampleId }) => sampleId);
 
   const chartOptions = computeChartOptions(
     computedFascicleLengths,

@@ -1,19 +1,28 @@
-import { FascicleLengthFrames, fasicleLengthColors } from "./fascicleModels";
+import {
+  FascicleLength,
+  FascicleLengthFrames,
+  FascicleLengthWithFrameNumber,
+  fascicleLengthColors,
+} from "./fascicleModels";
 
 export const getFascicleLengthColor = (sampleId: string): string => {
-  return fasicleLengthColors[sampleId] || "white";
+  return fascicleLengthColors[sampleId] || "white";
 };
 
-export const getSampleFascicleLengthIds = (
+export const getFlattenedSampleFascicleLengths = (
   lengthFrames: FascicleLengthFrames
-): string[] => {
-  const sampleIds = new Set<string>();
+): FascicleLengthWithFrameNumber[] => {
+  const sampleLengths: FascicleLengthWithFrameNumber[] = [];
 
-  Object.values(lengthFrames).forEach((lengthFrame) => {
-    lengthFrame.forEach(({ sampleId }) => {
-      sampleIds.add(sampleId);
+  Object.entries(lengthFrames).forEach(([frameNumber, lengthFrame]) => {
+    lengthFrame.forEach((length) => {
+      const newLength: FascicleLengthWithFrameNumber = {
+        ...length,
+        frameNumber: parseInt(frameNumber),
+      };
+      sampleLengths.push(newLength);
     });
   });
 
-  return Array.from(sampleIds);
+  return sampleLengths;
 };
