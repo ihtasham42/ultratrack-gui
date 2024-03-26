@@ -2,6 +2,7 @@ import { Box, Container, Grid, Stack } from "@mantine/core";
 import VideoContainer from "./features/video/VideoContainer";
 import StatisticsContainer from "./features/statistics/StatisticsContainer";
 import SampleFascicleContainer from "./features/fascicle/SampleFascicleContainer";
+import SampleRoiContainer from "./features/roi/SampleRoiContainer";
 
 const App = () => {
   return (
@@ -14,7 +15,14 @@ const App = () => {
           <Grid.Col span={6}>
             <Stack>
               <StatisticsContainer />
-              <SampleFascicleContainer />
+              <Grid>
+                <Grid.Col span={6}>
+                  <SampleFascicleContainer />
+                </Grid.Col>
+                <Grid.Col span={6}>
+                  <SampleRoiContainer />
+                </Grid.Col>
+              </Grid>
             </Stack>
           </Grid.Col>
         </Grid>

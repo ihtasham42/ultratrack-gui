@@ -8,6 +8,7 @@ import CanvasDisplay from "./CanvasDisplay";
 
 const VideoDisplay = () => {
   const { source, metadata } = useAppSelector((state) => state.video);
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const dispatch = useAppDispatch();
   const playbackState = metadata?.playbackState;

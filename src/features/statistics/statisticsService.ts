@@ -3,7 +3,7 @@ import {
   FascicleLengthFrames,
   FascicleLengthPoint,
 } from "../fascicle/fascicleModels";
-import { getFascicleLengthColor } from "../fascicle/fascicleUtils";
+import { getRenderColor } from "../renderCommon/renderUtils";
 import { fromTimeToFrame } from "../video/videoUtils";
 import { baseChartOptions } from "./statisticsModels";
 
@@ -51,7 +51,7 @@ export const toFascicleLengthChartData = (
       name: sampleId,
       type: "line",
       data,
-      color: getFascicleLengthColor(sampleId),
+      color: getRenderColor(sampleId),
     };
   });
 };
@@ -59,7 +59,7 @@ export const toFascicleLengthChartData = (
 export const getChartSeries = (frame: FascicleLengthFrame) => {
   return frame.map(({ sampleId }) => ({
     name: sampleId,
-    color: getFascicleLengthColor(sampleId),
+    color: getRenderColor(sampleId),
   }));
 };
 

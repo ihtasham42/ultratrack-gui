@@ -10,6 +10,10 @@ interface SetComputedFascicleLengthsPayload {
   computedFascicleLengths: FascicleLengthFrames;
 }
 
+interface RemoveSampleFascicleLengthPayload {
+  sampleId: string;
+}
+
 const mockComputed: FascicleLengthFrames = {};
 
 for (let i = 0; i <= 350; i++) {
@@ -56,21 +60,21 @@ const initialState: FascicleState = {
   // },
   computedFascicleLengths: mockComputed,
   sampleFascicleLengths: {
-    "1": [
+    "0": [
       {
         sampleId: "1",
-        point1: { x: 200, y: 300 },
-        point2: { x: 400, y: 500 },
+        point1: { x: 100, y: 300 },
+        point2: { x: 500, y: 500 },
       },
       {
         sampleId: "2",
-        point1: { x: 200, y: 300 },
-        point2: { x: 400, y: 500 },
+        point1: { x: 50, y: 250 },
+        point2: { x: 450, y: 475 },
       },
       {
         sampleId: "3",
-        point1: { x: 200, y: 300 },
-        point2: { x: 400, y: 500 },
+        point1: { x: 100, y: 225 },
+        point2: { x: 400, y: 425 },
       },
     ],
   },
@@ -88,9 +92,28 @@ export const fascicleSlice = createSlice({
 
       state.computedFascicleLengths = computedFascicleLengths;
     },
+    removeSampleFascicleLength: (
+      state,
+      action: PayloadAction<RemoveSampleFascicleLengthPayload>
+    ) => {
+      const { sampleId } = action.payload;
+
+      [state.sampleFascicleLengths, state.computedFascicleLengths].forEach(
+        (frames) => {
+          Object.entries(frames).forEach(([frameNumber, frame]) => {
+            const filteredFrame = frame.filter(
+              (length) => length.sampleId !== sampleId
+            );
+
+            frames[frameNumber] = filteredFrame;
+          });
+        }
+      );
+    },
   },
 });
 
-export const { setComputedFascicleLengths } = fascicleSlice.actions;
+export const { setComputedFascicleLengths, removeSampleFascicleLength } =
+  fascicleSlice.actions;
 
 export default fascicleSlice.reducer;

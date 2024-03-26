@@ -1,13 +1,16 @@
-import { Card, Title } from "@mantine/core";
-import SampleFascicleEntries from "./SampleFascicleEntries";
+import { Card, Group, Title } from "@mantine/core";
+import SampleFascicleTable from "./SampleFascicleTable";
+import SampleFascicleAddButton from "./SampleFascicleAddButton";
 
 const SampleFascicleContainer = () => {
   return (
     <Card withBorder>
-      <Title mb="sm" order={5}>
-        Sample Fascicle Lengths
-      </Title>
-      <SampleFascicleEntries />
+      <Group align="center" mb="sm">
+        <Title order={5}>Sample Fascicle Lengths</Title>
+        <SampleFascicleAddButton />
+      </Group>
+
+      <SampleFascicleTable />
     </Card>
   );
 };

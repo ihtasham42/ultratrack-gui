@@ -3,7 +3,8 @@ import { computeChartOptions } from "./statisticsService";
 import { useAppSelector } from "../../common/hooks";
 import ReactECharts from "echarts-for-react";
 import { fromTimeToFrame } from "../video/videoUtils";
-import { getFlattenedSampleFascicleLengths } from "../fascicle/fascicleUtils";
+import NoDataChart from "./NoDataChart";
+import { getFlattenedRenderObjects } from "../renderCommon/renderUtils";
 
 const Chart = () => {
   const { computedFascicleLengths, sampleFascicleLengths } = useAppSelector(
@@ -18,9 +19,9 @@ const Chart = () => {
 
   const { currentTime, duration } = metadata;
 
-  const sampleIds = getFlattenedSampleFascicleLengths(
-    sampleFascicleLengths
-  ).map(({ sampleId }) => sampleId);
+  const sampleIds = getFlattenedRenderObjects(sampleFascicleLengths).map(
+    ({ sampleId }) => sampleId
+  );
 
   const chartOptions = computeChartOptions(
     computedFascicleLengths,
@@ -51,8 +52,12 @@ const Chart = () => {
   }
 
   return (
-    <Box>
-      <ReactECharts option={chartOptions} style={{ height: 400 }} />
+    <Box h={300}>
+      {sampleIds.length !== 0 ? (
+        <ReactECharts notMerge option={chartOptions} style={{ height: 300 }} />
+      ) : (
+        <NoDataChart />
+      )}
     </Box>
   );
 };
