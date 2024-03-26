@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { RoiFrames } from "./roiModels";
+import { RoiFrame, RoiFrames } from "./roiModels";
 
 interface RoiState {
   computedRois: RoiFrames;
@@ -17,7 +17,18 @@ interface RemoveSampleRoiPayload {
 const mockComputed: RoiFrames = {};
 
 for (let i = 0; i <= 350; i++) {
-  const frame = [];
+  const frame: RoiFrame = [
+    {
+      sampleId: "1",
+      points: [
+        { x: 150, y: 200 },
+        { x: 475, y: 300 },
+        { x: 425, y: 500 },
+        { x: 100, y: 380 },
+      ],
+      fixed: false,
+    },
+  ];
 
   mockComputed[i] = frame;
 }
@@ -32,7 +43,7 @@ const initialState: RoiState = {
           { x: 150, y: 200 },
           { x: 475, y: 300 },
           { x: 425, y: 500 },
-          { x: 100, y: 300 },
+          { x: 100, y: 380 },
         ],
         fixed: false,
       },

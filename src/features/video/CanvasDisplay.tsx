@@ -4,7 +4,7 @@ import { fromTimeToFrame } from "./videoUtils";
 import { getRenderColor } from "../renderCommon/renderUtils";
 import { RoiPoint } from "../roi/roiModels";
 
-const POINT_SQUARE_SIZE = 12;
+const POINT_RADIUS = 6;
 const LINE_WIDTH = 4;
 
 const CanvasDisplay = () => {
@@ -35,6 +35,8 @@ const CanvasDisplay = () => {
     const drawRoi = (points: RoiPoint[], color: string) => {
       if (points.length < 2) return;
 
+      ctx.setLineDash([15, 10]);
+
       ctx.beginPath();
       ctx.moveTo(points[0].x, points[0].y);
       points.forEach((point, index) => {
@@ -42,10 +44,19 @@ const CanvasDisplay = () => {
           ctx.lineTo(point.x, point.y);
         }
       });
-      ctx.closePath();
+      ctx.lineTo(points[0].x, points[0].y);
       ctx.strokeStyle = color;
       ctx.lineWidth = LINE_WIDTH;
       ctx.stroke();
+      ctx.closePath();
+
+      points.forEach((point) => {
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, POINT_RADIUS, 0, 2 * Math.PI);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.closePath();
+      });
     };
 
     const drawFascicleLength = (
@@ -55,6 +66,8 @@ const CanvasDisplay = () => {
       y2: number,
       color: string
     ) => {
+      ctx.setLineDash([]);
+
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
@@ -62,20 +75,15 @@ const CanvasDisplay = () => {
       ctx.lineWidth = LINE_WIDTH;
       ctx.stroke();
 
-      ctx.fillStyle = color;
-      ctx.fillRect(
-        x1 - POINT_SQUARE_SIZE / 2,
-        y1 - POINT_SQUARE_SIZE / 2,
-        POINT_SQUARE_SIZE,
-        POINT_SQUARE_SIZE
-      );
-
-      ctx.fillRect(
-        x2 - POINT_SQUARE_SIZE / 2,
-        y2 - POINT_SQUARE_SIZE / 2,
-        POINT_SQUARE_SIZE,
-        POINT_SQUARE_SIZE
-      );
+      [
+        { x: x1, y: y1 },
+        { x: x2, y: y2 },
+      ].forEach((point) => {
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, POINT_RADIUS, 0, 2 * Math.PI);
+        ctx.fillStyle = color;
+        ctx.fill();
+      });
     };
 
     [computedRois, sampleRois].forEach((rois) => {
