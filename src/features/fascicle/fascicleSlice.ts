@@ -39,26 +39,7 @@ for (let i = 0; i <= 350; i++) {
 }
 
 const initialState: FascicleState = {
-  // computedFascicleLengths: {
-  //     1: [
-  //         {
-  //             sampleId: "1",
-  //             point1: {x: 200, y: 300},
-  //             point2: {x: 400, y: 500}
-  //         },
-  //         {
-  //             sampleId: "2",
-  //             point1: {x: 200, y: 300},
-  //             point2: {x: 400, y: 500}
-  //         },
-  //         {
-  //             sampleId: "3",
-  //             point1: {x: 200, y: 300},
-  //             point2: {x: 400, y: 500}
-  //         }
-  //     ]
-  // },
-  computedFascicleLengths: mockComputed,
+  computedFascicleLengths: {},
   sampleFascicleLengths: {
     "0": [
       {

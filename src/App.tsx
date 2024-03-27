@@ -3,6 +3,10 @@ import VideoContainer from "./features/video/VideoContainer";
 import StatisticsContainer from "./features/statistics/StatisticsContainer";
 import SampleFascicleContainer from "./features/fascicle/SampleFascicleContainer";
 import SampleRoiContainer from "./features/roi/SampleRoiContainer";
+import ManagerContainer from "./features/manager/ManagerContainer";
+import { makeServer } from "./features/mock/mockServer";
+
+makeServer();
 
 const App = () => {
   return (
@@ -23,6 +27,7 @@ const App = () => {
                   <SampleRoiContainer />
                 </Grid.Col>
               </Grid>
+              <ManagerContainer />
             </Stack>
           </Grid.Col>
         </Grid>

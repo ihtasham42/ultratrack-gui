@@ -1,9 +1,20 @@
 import { createServer } from "miragejs";
+import { ComputeVideoResponse } from "../manager/managerModels";
 
-createServer({
-  routes() {
-    this.namespace = "api";
+export function makeServer() {
+  createServer({
+    routes() {
+      this.get(
+        "/api/video/compute",
+        async (): Promise<ComputeVideoResponse> => {
+          await new Promise((res) => setTimeout(res, 2000));
 
-    this.get("/api/video/compute", () => ({}));
-  },
-});
+          return {
+            computedFascicleLengths: {},
+            computedRois: {},
+          };
+        }
+      );
+    },
+  });
+}
