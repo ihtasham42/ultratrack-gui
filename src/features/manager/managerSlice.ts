@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { setComputedFascicleLengths } from "../fascicle/fascicleSlice";
 import { setComputedRois } from "../roi/roiSlice";
+import { COMPUTE_VIDEO_ENDPOINT, ComputeVideoResponse } from "./managerModels";
 
 interface ManagerState {
   loading: boolean;
@@ -16,17 +17,21 @@ export const computeVideo = createAsyncThunk(
   "manager/computeVideo",
   async (_, { rejectWithValue, dispatch }) => {
     try {
-      const response = {};
+      const response: ComputeVideoResponse = await fetch(
+        COMPUTE_VIDEO_ENDPOINT
+      ).then((response) => response.json());
+
+      const { computedFascicleLengths, computedRois } = response;
 
       dispatch(
         setComputedFascicleLengths({
-          computedFascicleLengths: {},
+          computedFascicleLengths,
         })
       );
 
       dispatch(
         setComputedRois({
-          computedRois: {},
+          computedRois,
         })
       );
     } catch (err) {
