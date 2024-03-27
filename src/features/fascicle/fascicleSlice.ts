@@ -110,10 +110,20 @@ export const fascicleSlice = createSlice({
         }
       );
     },
+    clearSampleFascicleLengths: (state) => {
+      state.sampleFascicleLengths = {};
+    },
+    clearComputedFascicleLengths: (state) => {
+      state.computedFascicleLengths = {};
+    },
   },
 });
 
-export const { setComputedFascicleLengths, removeSampleFascicleLength } =
-  fascicleSlice.actions;
+export const {
+  setComputedFascicleLengths,
+  removeSampleFascicleLength,
+  clearSampleFascicleLengths,
+  clearComputedFascicleLengths,
+} = fascicleSlice.actions;
 
 export default fascicleSlice.reducer;

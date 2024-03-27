@@ -1,10 +1,11 @@
-import { Box, Paper, Text } from "@mantine/core";
+import { Box } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import VideoFooter from "./VideoFooter";
 import { useEffect, useRef } from "react";
 import { VideoPlaybackState } from "./videoModels";
 import { updateCurrentTime } from "./videoSlice";
 import CanvasDisplay from "./CanvasDisplay";
+import VideoHeader from "./VideoHeader";
 
 const VideoDisplay = () => {
   const { source, metadata } = useAppSelector((state) => state.video);
@@ -88,27 +89,27 @@ const VideoDisplay = () => {
   const { name } = metadata;
 
   return (
-    <Box style={{ position: "relative", width: "100%" }}>
-      <Paper w="100%" ta="center" mb="sm" bg="blue" p={1}>
-        <Text c="white">{name}</Text>
-      </Paper>
-      <Box>
-        <video src={source} ref={videoRef} width="100%">
-          Your browser does not support the video tag.
-        </video>
+    <Box>
+      <VideoHeader name={name} />
+      <Box style={{ position: "relative", width: "100%" }}>
+        <Box>
+          <video src={source} ref={videoRef} width="100%">
+            Your browser does not support the video tag.
+          </video>
+        </Box>
+        <Box
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <CanvasDisplay />
+        </Box>
+        <VideoFooter />
       </Box>
-      <Box
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <CanvasDisplay />
-      </Box>
-      <VideoFooter />
     </Box>
   );
 };

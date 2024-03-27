@@ -14,9 +14,9 @@ interface UploadVideoPayload {
 }
 
 interface UpdateCurrentTimePayload {
-  time: number
+  time: number;
 }
-interface SetCurrentTimePayload  {
+interface SetCurrentTimePayload {
   time: number;
 }
 
@@ -27,17 +27,17 @@ const initialState: VideoState = {
 
 const setCurrentTime = (state: VideoState, time: number) => {
   if (state.metadata) {
-    const {duration } = state.metadata
+    const { duration } = state.metadata;
 
     if (time < 0) {
-      time = 0
+      time = 0;
     } else if (time >= duration) {
-      time = duration
-      state.metadata.playbackState = VideoPlaybackState.PAUSED
+      time = duration;
+      state.metadata.playbackState = VideoPlaybackState.PAUSED;
     }
-    state.metadata.currentTime = time
+    state.metadata.currentTime = time;
   }
-}
+};
 
 export const videoSlice = createSlice({
   name: "video",
@@ -51,50 +51,66 @@ export const videoSlice = createSlice({
         duration,
         currentTime: 0,
         playbackState: VideoPlaybackState.PAUSED,
-        name
+        name,
       };
     },
     stepForward: (state) => {
       if (state.metadata) {
-        const {currentTime} = state.metadata
+        const { currentTime } = state.metadata;
 
-        setCurrentTime(state, currentTime + fromFrameToTime(1))
+        setCurrentTime(state, currentTime + fromFrameToTime(1));
       }
     },
     stepBackward: (state) => {
       if (state.metadata) {
-        const {currentTime} = state.metadata
+        const { currentTime } = state.metadata;
 
-        setCurrentTime(state, currentTime - fromFrameToTime(1))
+        setCurrentTime(state, currentTime - fromFrameToTime(1));
       }
     },
     jumpToTime: (state, action: PayloadAction<SetCurrentTimePayload>) => {
       if (state.metadata) {
-        const {time} = action.payload
+        const { time } = action.payload;
 
-        setCurrentTime(state, time)
+        setCurrentTime(state, time);
       }
     },
     playVideo: (state) => {
       if (state.metadata) {
-        state.metadata.playbackState = VideoPlaybackState.PLAYING
+        state.metadata.playbackState = VideoPlaybackState.PLAYING;
       }
     },
     pauseVideo: (state) => {
       if (state.metadata) {
-        state.metadata.playbackState = VideoPlaybackState.PAUSED
+        state.metadata.playbackState = VideoPlaybackState.PAUSED;
       }
     },
-    updateCurrentTime: (state, action: PayloadAction<UpdateCurrentTimePayload>) => {
+    updateCurrentTime: (
+      state,
+      action: PayloadAction<UpdateCurrentTimePayload>
+    ) => {
       if (state.metadata) {
-        const { time } = action.payload
-        
-        setCurrentTime(state, time)
+        const { time } = action.payload;
+
+        setCurrentTime(state, time);
       }
-    }
+    },
+    removeVideo: (state) => {
+      state.source = undefined;
+      state.metadata = undefined;
+    },
   },
 });
 
-export const { uploadVideo, playVideo, pauseVideo, stepForward, stepBackward, jumpToTime, updateCurrentTime } = videoSlice.actions;
+export const {
+  uploadVideo,
+  playVideo,
+  pauseVideo,
+  stepForward,
+  stepBackward,
+  jumpToTime,
+  updateCurrentTime,
+  removeVideo,
+} = videoSlice.actions;
 
 export default videoSlice.reducer;

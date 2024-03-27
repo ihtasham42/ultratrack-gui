@@ -73,9 +73,20 @@ export const roiSlice = createSlice({
         });
       });
     },
+    clearSampleRois: (state) => {
+      state.sampleRois = {};
+    },
+    clearComputedRois: (state) => {
+      state.computedRois = {};
+    },
   },
 });
 
-export const { setComputedRois, removeSampleRoi } = roiSlice.actions;
+export const {
+  setComputedRois,
+  removeSampleRoi,
+  clearSampleRois,
+  clearComputedRois,
+} = roiSlice.actions;
 
 export default roiSlice.reducer;
