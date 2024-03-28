@@ -26,3 +26,21 @@ export const getFlattenedRenderObjects = (
 
   return flattenedResult;
 };
+
+export const getFirstAvailableSampleId = (
+  renderFrames: RenderFrames
+): string => {
+  let sampleId = 1;
+
+  const flattenedRenderObjects = getFlattenedRenderObjects(renderFrames);
+
+  const sampleIdsInUse = new Set(
+    flattenedRenderObjects.map(({ sampleId }) => sampleId)
+  );
+
+  while (sampleIdsInUse.has(sampleId.toString())) {
+    sampleId += 1;
+  }
+
+  return sampleId.toString();
+};

@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { RoiFrame, RoiFrames } from "./roiModels";
+import { RoiFrame, RoiFrames, RoiPoint } from "./roiModels";
+import { getFirstAvailableSampleId } from "../renderCommon/renderUtils";
 
 interface RoiState {
   computedRois: RoiFrames;
@@ -12,6 +13,11 @@ interface SetComputedRoisPayload {
 
 interface RemoveSampleRoiPayload {
   sampleId: string;
+}
+
+interface AddSampleRoi {
+  points: RoiPoint[];
+  frameNumber: number;
 }
 
 const mockComputed: RoiFrames = {};
@@ -34,7 +40,7 @@ for (let i = 0; i <= 350; i++) {
 }
 
 const initialState: RoiState = {
-  computedRois: mockComputed,
+  computedRois: {},
   sampleRois: {
     "0": [
       {
@@ -78,6 +84,22 @@ export const roiSlice = createSlice({
     },
     clearComputedRois: (state) => {
       state.computedRois = {};
+    },
+    addSampleRoi: (state, action: PayloadAction<AddSampleRoi>) => {
+      const { points, frameNumber } = action.payload;
+      const { sampleRois } = state;
+
+      const sampleId = getFirstAvailableSampleId(sampleRois);
+
+      if (!sampleRois[frameNumber]) {
+        sampleRois[frameNumber] = [];
+      }
+
+      sampleRois[frameNumber].push({
+        sampleId,
+        points,
+        fixed: false,
+      });
     },
   },
 });
