@@ -1,20 +1,37 @@
 import { ActionIcon, Checkbox, Group, Table } from "@mantine/core";
 import SampleColorBadge from "../../common/components/SampleColorBadge";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
-import { removeSampleRoi } from "./roiSlice";
+import { removeSampleRoi, setFixedRoi } from "./roiSlice";
 import { IconEye, IconX } from "@tabler/icons-react";
 import { getFlattenedRenderObjects } from "../renderCommon/renderUtils";
+import { RoiWithFrameNumber } from "./roiModels";
 
 const SampleRoiTable = () => {
   const { sampleRois } = useAppSelector((state) => state.roi);
   const dispatch = useAppDispatch();
 
-  const flattenedLengths = getFlattenedRenderObjects(sampleRois);
+  const flattenedRois = getFlattenedRenderObjects(
+    sampleRois
+  ) as RoiWithFrameNumber[];
 
   const handleRemoveSampleRoi = (sampleId: string) => {
     const payload = { sampleId };
 
     dispatch(removeSampleRoi(payload));
+  };
+
+  const handleSetFixedRoi = (
+    event: React.FormEvent<HTMLInputElement>,
+    sampleId: string,
+    frameNumber: number
+  ) => {
+    const payload = {
+      newValue: event.currentTarget.checked,
+      sampleId,
+      frameNumber,
+    };
+
+    dispatch(setFixedRoi(payload));
   };
 
   return (
@@ -28,7 +45,7 @@ const SampleRoiTable = () => {
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
-        {flattenedLengths.map(({ sampleId, frameNumber }) => (
+        {flattenedRois.map(({ sampleId, frameNumber, fixed }) => (
           <Table.Tr key={sampleId}>
             <Table.Td>
               <SampleColorBadge sampleId={sampleId} />
@@ -49,7 +66,12 @@ const SampleRoiTable = () => {
               </Group>
             </Table.Td>
             <Table.Td>
-              <Checkbox />
+              <Checkbox
+                checked={fixed}
+                onChange={(event) =>
+                  handleSetFixedRoi(event, sampleId, frameNumber)
+                }
+              />
             </Table.Td>
           </Table.Tr>
         ))}

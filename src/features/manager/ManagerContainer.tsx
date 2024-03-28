@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Card, Group, Text, Title } from "@mantine/core";
+import { Alert, Button, Card, Group, Title } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import {
   clearComputedFascicleLengths,
