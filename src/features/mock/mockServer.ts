@@ -8,7 +8,7 @@ import {
   FascicleLengthFrames,
   FascicleLengthWithFrameNumber,
 } from "../fascicle/fascicleModels";
-import { RoiFrames } from "../roi/roiModels";
+import { Roi, RoiFrames, RoiWithFrameNumber } from "../roi/roiModels";
 import { getFlattenedRenderObjects } from "../renderCommon/renderUtils";
 
 export function makeServer() {
@@ -88,11 +88,31 @@ const computeFascicleLengths = (
     }
   );
 
-  console.log(computeFascicleLengths);
-
   return computedFascicleLengths;
 };
 
 const computeRois = (sampleRois: RoiFrames, maxFrame: number): RoiFrames => {
-  return {};
+  const computedRois: RoiFrames = {};
+
+  const flattenedRois = getFlattenedRenderObjects(
+    sampleRois
+  ) as RoiWithFrameNumber[];
+
+  flattenedRois.map(({ points, sampleId, fixed }) => {
+    for (let frameNumber = 0; frameNumber <= maxFrame; frameNumber++) {
+      if (!computedRois[frameNumber]) {
+        computedRois[frameNumber] = [];
+      }
+
+      const roi: Roi = {
+        points,
+        sampleId,
+        fixed,
+      };
+
+      computedRois[frameNumber].push(roi);
+    }
+  });
+
+  return computedRois;
 };

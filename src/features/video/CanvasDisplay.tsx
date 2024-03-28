@@ -100,7 +100,7 @@ const CanvasDisplay = () => {
         drawFascicleLength(point1.x, point1.y, point2.x, point2.y, color);
       });
     });
-  }, [metadata, computedFascicleLengths]);
+  }, [metadata, computedFascicleLengths, sampleFascicleLengths]);
 
   if (!metadata) {
     return null;

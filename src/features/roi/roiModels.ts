@@ -1,7 +1,7 @@
 export interface Roi {
   sampleId: string;
   points: RoiPoint[];
-  fixed: false;
+  fixed: boolean;
 }
 
 export interface RoiWithFrameNumber extends Roi {
