@@ -6,4 +6,10 @@ export interface ComputeVideoResponse {
   computedRois: RoiFrames;
 }
 
+export interface ComputeVideoPayload {
+  sampleFascicleLengths: FascicleLengthFrames;
+  sampleRois: RoiFrames;
+  maxFrame: number;
+}
+
 export const COMPUTE_VIDEO_ENDPOINT = "/api/video/compute";
