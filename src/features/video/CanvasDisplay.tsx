@@ -100,7 +100,13 @@ const CanvasDisplay = () => {
         drawFascicleLength(point1.x, point1.y, point2.x, point2.y, color);
       });
     });
-  }, [metadata, computedFascicleLengths, sampleFascicleLengths]);
+  }, [
+    metadata,
+    computedFascicleLengths,
+    sampleFascicleLengths,
+    computedRois,
+    sampleRois,
+  ]);
 
   if (!metadata) {
     return null;
@@ -109,6 +115,8 @@ const CanvasDisplay = () => {
   const { currentTime } = metadata;
 
   const currentFrame = fromTimeToFrame(currentTime);
+
+  console.log("Draw");
 
   return <canvas ref={canvasRef} width={600} height={600} />;
 };

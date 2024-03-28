@@ -15,7 +15,7 @@ interface RemoveSampleRoiPayload {
   sampleId: string;
 }
 
-interface AddSampleRoi {
+export interface AddSampleRoiPayload {
   points: RoiPoint[];
   frameNumber: number;
 }
@@ -85,7 +85,7 @@ export const roiSlice = createSlice({
     clearComputedRois: (state) => {
       state.computedRois = {};
     },
-    addSampleRoi: (state, action: PayloadAction<AddSampleRoi>) => {
+    addSampleRoi: (state, action: PayloadAction<AddSampleRoiPayload>) => {
       const { points, frameNumber } = action.payload;
       const { sampleRois } = state;
 
@@ -109,6 +109,7 @@ export const {
   removeSampleRoi,
   clearSampleRois,
   clearComputedRois,
+  addSampleRoi,
 } = roiSlice.actions;
 
 export default roiSlice.reducer;

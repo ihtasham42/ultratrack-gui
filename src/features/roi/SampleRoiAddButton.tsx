@@ -1,14 +1,36 @@
 import { Button } from "@mantine/core";
-import { useAppDispatch } from "../../common/hooks";
-import { Roi } from "./roiModels";
+import { useAppDispatch, useAppSelector } from "../../common/hooks";
+import { AddSampleRoiPayload, addSampleRoi } from "./roiSlice";
+import { fromTimeToFrame } from "../video/videoUtils";
 
 const SampleRoiAddButton = () => {
+  const { metadata } = useAppSelector((state) => state.video);
   const dispatch = useAppDispatch();
 
   const handleAddSampleRoi = () => {
-    const roi: Roi = {
-      points: [],
+    if (!metadata) return;
+
+    const { currentTime } = metadata;
+    const frameNumber = fromTimeToFrame(currentTime);
+
+    const points = [
+      { x: 150, y: 200 },
+      { x: 475, y: 300 },
+      { x: 425, y: 500 },
+      { x: 100, y: 380 },
+    ].map(({ x, y }) => {
+      const xr = (Math.random() - 0.5) * 50;
+      const yr = (Math.random() - 0.5) * 50;
+
+      return { x: x + xr, y: y + yr };
+    });
+
+    const payload: AddSampleRoiPayload = {
+      points,
+      frameNumber,
     };
+
+    dispatch(addSampleRoi(payload));
   };
 
   return (
