@@ -1,5 +1,4 @@
 import { Card, Group, Title } from "@mantine/core";
-import SampleFascicleAddButton from "../fascicle/SampleFascicleAddButton";
 import SampleRoiTable from "./SampleRoiTable";
 import SampleRoiAddButton from "./SampleRoiAddButton";
 

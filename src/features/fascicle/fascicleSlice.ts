@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { FascicleLengthFrames } from "./fascicleModels";
+import { FascicleLengthFrames, FascicleLengthPoint } from "./fascicleModels";
+import { getFirstAvailableSampleId } from "../renderCommon/renderUtils";
 
 interface FascicleState {
   computedFascicleLengths: FascicleLengthFrames;
@@ -12,6 +13,12 @@ interface SetComputedFascicleLengthsPayload {
 
 interface RemoveSampleFascicleLengthPayload {
   sampleId: string;
+}
+
+export interface AddSampleFascicleLengthPayload {
+  point1: FascicleLengthPoint;
+  point2: FascicleLengthPoint;
+  frameNumber: number;
 }
 
 const mockComputed: FascicleLengthFrames = {};
@@ -97,6 +104,25 @@ export const fascicleSlice = createSlice({
     clearComputedFascicleLengths: (state) => {
       state.computedFascicleLengths = {};
     },
+    addSampleFascicleLength: (
+      state,
+      action: PayloadAction<AddSampleFascicleLengthPayload>
+    ) => {
+      const { point1, point2, frameNumber } = action.payload;
+      const { sampleFascicleLengths } = state;
+
+      const sampleId = getFirstAvailableSampleId(sampleFascicleLengths);
+
+      if (!sampleFascicleLengths[frameNumber]) {
+        sampleFascicleLengths[frameNumber] = [];
+      }
+
+      sampleFascicleLengths[frameNumber].push({
+        sampleId,
+        point1,
+        point2,
+      });
+    },
   },
 });
 
@@ -105,6 +131,7 @@ export const {
   removeSampleFascicleLength,
   clearSampleFascicleLengths,
   clearComputedFascicleLengths,
+  addSampleFascicleLength,
 } = fascicleSlice.actions;
 
 export default fascicleSlice.reducer;

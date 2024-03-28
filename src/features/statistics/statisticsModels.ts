@@ -1,7 +1,4 @@
 export const baseChartOptions = {
-  title: {
-    text: "Fascicle Length over Time",
-  },
   tooltip: {
     trigger: "axis",
   },

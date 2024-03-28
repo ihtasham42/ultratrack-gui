@@ -19,8 +19,8 @@ const SampleRoiAddButton = () => {
       { x: 425, y: 500 },
       { x: 100, y: 380 },
     ].map(({ x, y }) => {
-      const xr = (Math.random() - 0.5) * 50;
-      const yr = (Math.random() - 0.5) * 50;
+      const xr = (Math.random() - 0.5) * 150;
+      const yr = (Math.random() - 0.5) * 150;
 
       return { x: x + xr, y: y + yr };
     });
