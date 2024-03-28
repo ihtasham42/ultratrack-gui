@@ -25,13 +25,24 @@ const ManagerContainer = () => {
 
   return (
     <Card withBorder style={{ maxWidth: "max-content" }}>
+      <Title order={5} mb="sm">
+        Data Manager
+      </Title>
       {!error ? (
-        <Group>
-          <Title order={5}>Manager</Title>
-          <Button loading={loading} onClick={handleComputeVideo}>
+        <Group gap="xs">
+          <Button
+            size="compact-sm"
+            loading={loading}
+            onClick={handleComputeVideo}
+          >
             Compute Video
           </Button>
-          <Button loading={loading} color="red" onClick={handleClearData}>
+          <Button
+            size="compact-sm"
+            loading={loading}
+            color="red"
+            onClick={handleClearData}
+          >
             Clear Data
           </Button>
         </Group>

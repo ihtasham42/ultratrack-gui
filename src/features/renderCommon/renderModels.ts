@@ -8,9 +8,11 @@ import { Roi, RoiFrames, RoiWithFrameNumber } from "../roi/roiModels";
 export const renderColors: Record<string, string> = {
   "1": "red",
   "2": "blue",
-  "3": "green",
+  "3": "lime",
   "4": "purple",
-  "5": "orange",
+  "5": "cyan",
+  "6": "pink",
+  "7": "green",
 };
 
 export type FlattenedResult =

@@ -98,21 +98,50 @@ const computeRois = (sampleRois: RoiFrames, maxFrame: number): RoiFrames => {
     sampleRois
   ) as RoiWithFrameNumber[];
 
-  flattenedRois.map(({ points, sampleId, fixed }) => {
-    for (let frameNumber = 0; frameNumber <= maxFrame; frameNumber++) {
-      if (!computedRois[frameNumber]) {
-        computedRois[frameNumber] = [];
+  const sp = 0.3;
+
+  flattenedRois.map(
+    ({
+      points: samplePoints,
+      sampleId,
+      fixed,
+      frameNumber: sampleFrameNumber,
+    }) => {
+      const rfs = samplePoints.map(() => ({
+        x: Math.random() * 2 - 1,
+        y: Math.random() * 2 - 1,
+      }));
+
+      for (let frameNumber = 0; frameNumber <= maxFrame; frameNumber++) {
+        if (!computedRois[frameNumber]) {
+          computedRois[frameNumber] = [];
+        }
+
+        const dfn = sampleFrameNumber - frameNumber;
+
+        let points = [...samplePoints];
+
+        if (!fixed) {
+          points = points.map(({ x, y }, i) => {
+            const rf = rfs[i];
+
+            return {
+              x: x + rf.x * dfn * sp,
+              y: y + rf.y * dfn * sp,
+            };
+          });
+        }
+
+        const roi: Roi = {
+          points,
+          sampleId,
+          fixed,
+        };
+
+        computedRois[frameNumber].push(roi);
       }
-
-      const roi: Roi = {
-        points,
-        sampleId,
-        fixed,
-      };
-
-      computedRois[frameNumber].push(roi);
     }
-  });
+  );
 
   return computedRois;
 };

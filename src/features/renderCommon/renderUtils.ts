@@ -6,7 +6,7 @@ import {
 } from "./renderModels";
 
 export const getRenderColor = (sampleId: string): string => {
-  return renderColors[sampleId] || "white";
+  return renderColors[sampleId] || "orange";
 };
 
 export const getFlattenedRenderObjects = (
