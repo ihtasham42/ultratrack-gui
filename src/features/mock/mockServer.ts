@@ -54,10 +54,10 @@ const computeFascicleLengths = (
 
   flattenedLengths.map(
     ({ point1, point2, sampleId, frameNumber: sampleFrameNumber }) => {
-      const rx1 = Math.random() * 2 - 1;
-      const ry1 = Math.random() * 2 - 1;
-      const rx2 = Math.random() * 2 - 1;
-      const ry2 = Math.random() * 2 - 1;
+      const [rx1, ry1, rx2, ry2] = Array.from(
+        { length: 4 },
+        () => (Math.random() - 0.5) * 2
+      );
 
       const sp = 0.3;
 
@@ -71,15 +71,20 @@ const computeFascicleLengths = (
         const { x: x1, y: y1 } = point1;
         const { x: x2, y: y2 } = point2;
 
+        const [ox1, oy1, ox2, oy2] = Array.from(
+          { length: 4 },
+          () => (Math.random() - 0.5) * 10
+        );
+
         const length: FascicleLength = {
           sampleId: sampleId,
           point1: {
-            x: x1 + rx1 * dfn * sp,
-            y: y1 + ry1 * dfn * sp,
+            x: x1 + rx1 * dfn * sp + ox1,
+            y: y1 + ry1 * dfn * sp + oy1,
           },
           point2: {
-            x: x2 + rx2 * dfn * sp,
-            y: y2 + ry2 * dfn * sp,
+            x: x2 + rx2 * dfn * sp + ox2,
+            y: y2 + ry2 * dfn * sp + oy2,
           },
         };
 
