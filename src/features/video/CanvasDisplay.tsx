@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import { fromTimeToFrame } from "./videoUtils";
-import { getRenderColor } from "../renderCommon/renderUtils";
+import {
+  getFirstAvailableSampleId,
+  getRenderColor,
+} from "../renderCommon/renderUtils";
 import { drawFascicleLength, drawMarkLine, drawRoi } from "./videoService";
 import { MarkMode, MarkPoint } from "./videoModels";
 import { addMarkPoint, setMarkMode } from "./videoSlice";
@@ -62,12 +65,29 @@ const CanvasDisplay = () => {
 
     if (points.length > 0 && currentMousePos) {
       const mouseMarkPoint: MarkPoint = currentMousePos;
-      console.log(points[points.length - 1] as MarkPoint, mouseMarkPoint);
+
+      let sampleId = "1";
+
+      if (mode === MarkMode.FASCICLE_LENGTH) {
+        sampleId = getFirstAvailableSampleId(sampleFascicleLengths);
+      } else if (mode === MarkMode.ROI) {
+        sampleId = getFirstAvailableSampleId(sampleRois);
+      }
+
+      const color = getRenderColor(sampleId);
+
+      for (let i = 1; i < points.length; i++) {
+        const currentPoint = points[i] as MarkPoint;
+        const previousPoint = points[i - 1] as MarkPoint;
+
+        drawMarkLine(ctx, currentPoint, previousPoint, color);
+      }
+
       drawMarkLine(
         ctx,
         points[points.length - 1] as MarkPoint,
         mouseMarkPoint,
-        "red"
+        color
       );
     }
   }, [currentMousePos, mode, points]);
