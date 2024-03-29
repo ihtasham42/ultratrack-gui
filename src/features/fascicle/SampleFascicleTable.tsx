@@ -4,12 +4,15 @@ import { IconEye, IconX } from "@tabler/icons-react";
 import SampleColorBadge from "../../common/components/SampleColorBadge";
 import { removeSampleFascicleLength } from "./fascicleSlice";
 import { getFlattenedRenderObjects } from "../renderCommon/renderUtils";
+import { FascicleLengthWithFrameNumber } from "./fascicleModels";
 
 const SampleFascicleTable = () => {
   const { sampleFascicleLengths } = useAppSelector((state) => state.fascicle);
   const dispatch = useAppDispatch();
 
-  const flattenedLengths = getFlattenedRenderObjects(sampleFascicleLengths);
+  const flattenedLengths = getFlattenedRenderObjects(
+    sampleFascicleLengths
+  ) as FascicleLengthWithFrameNumber[];
 
   const handleRemoveSampleFascicleLength = (sampleId: string) => {
     const payload = { sampleId };
@@ -27,7 +30,7 @@ const SampleFascicleTable = () => {
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
-        {flattenedLengths.map(({ sampleId, frameNumber }) => (
+        {flattenedLengths.map(({ sampleId, frameNumber, visible }) => (
           <Table.Tr key={sampleId}>
             <Table.Td>
               <SampleColorBadge sampleId={sampleId} />
@@ -42,7 +45,7 @@ const SampleFascicleTable = () => {
                 >
                   <IconX />
                 </ActionIcon>
-                <ActionIcon size="sm">
+                <ActionIcon size="sm" color={visible ? "blue" : "gray"}>
                   <IconEye />
                 </ActionIcon>
               </Group>

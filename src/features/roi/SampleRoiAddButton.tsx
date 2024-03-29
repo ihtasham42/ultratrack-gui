@@ -1,39 +1,25 @@
 import { Button } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
-import { AddSampleRoiPayload, addSampleRoi } from "./roiSlice";
-import { fromTimeToFrame } from "../video/videoUtils";
+import { MarkMode } from "../video/videoModels";
+import { setMarkMode } from "../video/videoSlice";
+import CancelMarkButton from "../renderCommon/CancelMarkButton";
 
 const SampleRoiAddButton = () => {
-  const { metadata } = useAppSelector((state) => state.video);
+  const { mark } = useAppSelector((state) => state.video);
   const dispatch = useAppDispatch();
 
+  const { mode } = mark;
+
   const handleAddSampleRoi = () => {
-    if (!metadata) return;
-
-    const { currentTime } = metadata;
-    const frameNumber = fromTimeToFrame(currentTime);
-
-    const points = [
-      { x: 150, y: 200 },
-      { x: 475, y: 300 },
-      { x: 425, y: 500 },
-      { x: 100, y: 380 },
-    ].map(({ x, y }) => {
-      const xr = (Math.random() - 0.5) * 150;
-      const yr = (Math.random() - 0.5) * 150;
-
-      return { x: x + xr, y: y + yr };
-    });
-
-    const payload: AddSampleRoiPayload = {
-      points,
-      frameNumber,
-    };
-
-    dispatch(addSampleRoi(payload));
+    if (mode === MarkMode.ROI) {
+      dispatch(setMarkMode({ mode: MarkMode.DISABLED }));
+    } else {
+      dispatch(setMarkMode({ mode: MarkMode.ROI }));
+    }
   };
-
-  return (
+  return mode === MarkMode.ROI ? (
+    <CancelMarkButton />
+  ) : (
     <Button size="compact-sm" onClick={handleAddSampleRoi}>
       + New
     </Button>

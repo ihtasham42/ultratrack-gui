@@ -1,10 +1,19 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { VideoMetadata, VideoPlaybackState } from "./videoModels";
+import {
+  MarkMode,
+  MarkPoint,
+  VideoMetadata,
+  VideoPlaybackState,
+} from "./videoModels";
 import { fromFrameToTime } from "./videoUtils";
 
 interface VideoState {
   source?: string;
   metadata?: VideoMetadata;
+  mark: {
+    mode: MarkMode;
+    points: object[];
+  };
 }
 
 interface UploadVideoPayload {
@@ -20,9 +29,21 @@ interface SetCurrentTimePayload {
   time: number;
 }
 
+export interface SetMarkModePayload {
+  mode: MarkMode;
+}
+
+export interface AddMarkPointPayload {
+  point: MarkPoint;
+}
+
 const initialState: VideoState = {
   source: undefined,
   metadata: undefined,
+  mark: {
+    mode: MarkMode.DISABLED,
+    points: [],
+  },
 };
 
 const setCurrentTime = (state: VideoState, time: number) => {
@@ -99,6 +120,19 @@ export const videoSlice = createSlice({
       state.source = undefined;
       state.metadata = undefined;
     },
+    setMarkMode: (state, action: PayloadAction<SetMarkModePayload>) => {
+      const { mode } = action.payload;
+
+      state.mark = {
+        mode,
+        points: [],
+      };
+    },
+    addMarkPoint: (state, action: PayloadAction<AddMarkPointPayload>) => {
+      const { point } = action.payload;
+
+      state.mark.points.push(point);
+    },
   },
 });
 
@@ -111,6 +145,8 @@ export const {
   jumpToTime,
   updateCurrentTime,
   removeVideo,
+  setMarkMode,
+  addMarkPoint,
 } = videoSlice.actions;
 
 export default videoSlice.reducer;

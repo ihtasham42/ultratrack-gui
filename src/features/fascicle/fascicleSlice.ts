@@ -21,6 +21,12 @@ export interface AddSampleFascicleLengthPayload {
   frameNumber: number;
 }
 
+export interface SetVisibleFascicleLengthPayload {
+  frameNumber: number;
+  sampleId: string;
+  newValue: boolean;
+}
+
 const initialState: FascicleState = {
   computedFascicleLengths: {},
   sampleFascicleLengths: {},
@@ -81,6 +87,22 @@ export const fascicleSlice = createSlice({
         point2,
       });
     },
+    setVisibleFascicleLength: (
+      state,
+      action: PayloadAction<SetVisibleFascicleLengthPayload>
+    ) => {
+      const { frameNumber, sampleId, newValue } = action.payload;
+
+      const frame = state.sampleFascicleLengths[frameNumber];
+
+      if (!frame) return;
+
+      const length = frame.find((length) => length.sampleId === sampleId);
+
+      if (!length) return;
+
+      length.visible = newValue;
+    },
   },
 });
 
@@ -90,6 +112,7 @@ export const {
   clearSampleFascicleLengths,
   clearComputedFascicleLengths,
   addSampleFascicleLength,
+  setVisibleFascicleLength,
 } = fascicleSlice.actions;
 
 export default fascicleSlice.reducer;

@@ -1,19 +1,29 @@
 import { useEffect, useRef } from "react";
-import { useAppSelector } from "../../common/hooks";
+import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import { fromTimeToFrame } from "./videoUtils";
 import { getRenderColor } from "../renderCommon/renderUtils";
+import { drawFascicleLength, drawRoi } from "./videoService";
+import { MarkMode, MarkPoint } from "./videoModels";
+import { addMarkPoint, setMarkMode } from "./videoSlice";
+import {
+  AddSampleFascicleLengthPayload,
+  addSampleFascicleLength,
+} from "../fascicle/fascicleSlice";
+import { FascicleLengthPoint } from "../fascicle/fascicleModels";
+import { getDistanceBetweenPoints } from "../statistics/statisticsService";
+import { addSampleRoi } from "../roi/roiSlice";
 import { RoiPoint } from "../roi/roiModels";
-
-const POINT_RADIUS = 6;
-const LINE_WIDTH = 4;
 
 const CanvasDisplay = () => {
   const { computedFascicleLengths, sampleFascicleLengths } = useAppSelector(
     (state) => state.fascicle
   );
   const { computedRois, sampleRois } = useAppSelector((state) => state.roi);
-  const { metadata } = useAppSelector((state) => state.video);
+  const { metadata, mark } = useAppSelector((state) => state.video);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const dispatch = useAppDispatch();
+
+  const { mode, points } = mark;
 
   useEffect(() => {
     if (!metadata) {
@@ -32,64 +42,10 @@ const CanvasDisplay = () => {
 
     ctx.clearRect(0, 0, 1000, 1000);
 
-    const drawRoi = (points: RoiPoint[], color: string) => {
-      if (points.length < 2) return;
-
-      ctx.setLineDash([15, 10]);
-
-      ctx.beginPath();
-      ctx.moveTo(points[0].x, points[0].y);
-      points.forEach((point, index) => {
-        if (index > 0) {
-          ctx.lineTo(point.x, point.y);
-        }
-      });
-      ctx.lineTo(points[0].x, points[0].y);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = LINE_WIDTH;
-      ctx.stroke();
-      ctx.closePath();
-
-      points.forEach((point) => {
-        ctx.beginPath();
-        ctx.arc(point.x, point.y, POINT_RADIUS, 0, 2 * Math.PI);
-        ctx.fillStyle = color;
-        ctx.fill();
-        ctx.closePath();
-      });
-    };
-
-    const drawFascicleLength = (
-      x1: number,
-      y1: number,
-      x2: number,
-      y2: number,
-      color: string
-    ) => {
-      ctx.setLineDash([]);
-
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = LINE_WIDTH;
-      ctx.stroke();
-
-      [
-        { x: x1, y: y1 },
-        { x: x2, y: y2 },
-      ].forEach((point) => {
-        ctx.beginPath();
-        ctx.arc(point.x, point.y, POINT_RADIUS, 0, 2 * Math.PI);
-        ctx.fillStyle = color;
-        ctx.fill();
-      });
-    };
-
     [computedRois, sampleRois].forEach((rois) => {
       rois[currentFrame]?.forEach(({ points, sampleId }) => {
         const color = getRenderColor(sampleId);
-        drawRoi(points, color);
+        drawRoi(ctx, points, color);
       });
     });
 
@@ -97,7 +53,7 @@ const CanvasDisplay = () => {
       lengths[currentFrame]?.forEach((length) => {
         const { point1, point2, sampleId } = length;
         const color = getRenderColor(sampleId);
-        drawFascicleLength(point1.x, point1.y, point2.x, point2.y, color);
+        drawFascicleLength(ctx, point1, point2, color);
       });
     });
   }, [
@@ -108,15 +64,82 @@ const CanvasDisplay = () => {
     sampleRois,
   ]);
 
+  useEffect(() => {
+    if (!metadata) {
+      return;
+    }
+
+    const canvas = canvasRef.current;
+
+    if (!canvas) return;
+
+    const handleCanvasClick = (event: MouseEvent) => {
+      if (mode === MarkMode.DISABLED) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const point: MarkPoint = { x, y };
+
+      const newPoints = [...points, point];
+
+      if (mode === MarkMode.FASCICLE_LENGTH) {
+        dispatch(addMarkPoint({ point }));
+
+        if (newPoints.length === 2) {
+          const lengthPoints = newPoints as FascicleLengthPoint[];
+
+          const payload: AddSampleFascicleLengthPayload = {
+            point1: lengthPoints[0],
+            point2: lengthPoints[1],
+            frameNumber: currentFrame,
+          };
+
+          dispatch(addSampleFascicleLength(payload));
+          dispatch(setMarkMode({ mode: MarkMode.DISABLED }));
+        }
+      }
+
+      if (mode === MarkMode.ROI) {
+        if (newPoints.length <= 1) {
+          dispatch(addMarkPoint({ point }));
+        } else {
+          const distance = getDistanceBetweenPoints(
+            newPoints[0] as FascicleLengthPoint,
+            newPoints[newPoints.length - 1] as FascicleLengthPoint
+          );
+
+          if (distance < 50) {
+            const roiPoints = points as RoiPoint[];
+
+            const payload = {
+              points: roiPoints,
+              frameNumber: currentFrame,
+            };
+
+            dispatch(addSampleRoi(payload));
+            dispatch(setMarkMode({ mode: MarkMode.DISABLED }));
+          } else {
+            dispatch(addMarkPoint({ point }));
+          }
+        }
+      }
+    };
+
+    canvas.addEventListener("click", handleCanvasClick);
+
+    return () => {
+      canvas.removeEventListener("click", handleCanvasClick);
+    };
+  }, [mark, points]);
+
   if (!metadata) {
     return null;
   }
 
   const { currentTime } = metadata;
-
   const currentFrame = fromTimeToFrame(currentTime);
-
-  console.log("Draw");
 
   return <canvas ref={canvasRef} width={600} height={600} />;
 };

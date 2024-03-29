@@ -6,7 +6,7 @@ const SampleFascicleContainer = () => {
   return (
     <Card withBorder>
       <Group align="center" mb="sm">
-        <Title order={5}>Sample Fascicle Lengths</Title>
+        <Title order={6}>Sample Fascicle Lengths</Title>
         <SampleFascicleAddButton />
       </Group>
 

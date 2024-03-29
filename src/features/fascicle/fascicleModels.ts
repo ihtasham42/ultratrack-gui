@@ -2,6 +2,7 @@ export interface FascicleLength {
   sampleId: string;
   point1: FascicleLengthPoint;
   point2: FascicleLengthPoint;
+  visible?: boolean;
 }
 
 export interface FascicleLengthWithFrameNumber extends FascicleLength {

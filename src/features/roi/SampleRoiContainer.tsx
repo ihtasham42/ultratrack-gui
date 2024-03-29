@@ -6,7 +6,7 @@ const SampleRoiContainer = () => {
   return (
     <Card withBorder>
       <Group align="between" mb="sm">
-        <Title order={5}>Sample ROIs</Title>
+        <Title order={6}>Sample ROIs</Title>
         <SampleRoiAddButton />
       </Group>
 
