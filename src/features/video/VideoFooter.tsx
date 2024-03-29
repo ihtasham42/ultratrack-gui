@@ -4,7 +4,7 @@ import VideoSlider from "./VideoSlider";
 
 const VideoFooter = () => {
   return (
-    <Group align="center">
+    <Group align="center" mb="md">
       <VideoSlider />
       <VideoControls />
     </Group>

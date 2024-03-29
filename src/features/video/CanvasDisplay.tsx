@@ -111,14 +111,29 @@ const CanvasDisplay = () => {
 
     [computedRois, sampleRois].forEach((rois) => {
       rois[currentFrame]?.forEach(({ points, sampleId }) => {
+        if (
+          rois === sampleRois &&
+          computedRois[currentFrame]?.find((roi) => roi.sampleId === sampleId)
+        ) {
+          return;
+        }
+
         const color = getRenderColor(sampleId);
         drawRoi(ctx, points, color);
       });
     });
 
     [computedFascicleLengths, sampleFascicleLengths].forEach((lengths) => {
-      lengths[currentFrame]?.forEach((length) => {
-        const { point1, point2, sampleId } = length;
+      lengths[currentFrame]?.forEach(({ point1, point2, sampleId }) => {
+        if (
+          lengths === sampleFascicleLengths &&
+          computedFascicleLengths[currentFrame]?.find(
+            (length) => length.sampleId === sampleId
+          )
+        ) {
+          return;
+        }
+
         const color = getRenderColor(sampleId);
         drawFascicleLength(ctx, point1, point2, color);
       });
