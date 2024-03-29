@@ -1,11 +1,18 @@
 import { Box } from "@mantine/core";
-import { computeChartOptions } from "./statisticsService";
+import {
+  computeChartOptions,
+  getDistanceBetweenPoints,
+} from "./statisticsService";
 import { useAppSelector } from "../../common/hooks";
 import ReactECharts from "echarts-for-react";
 import { fromTimeToFrame } from "../video/videoUtils";
 import NoDataChart from "./NoDataChart";
 import { getFlattenedRenderObjects } from "../renderCommon/renderUtils";
 import { useMemo } from "react";
+import {
+  FascicleLength,
+  FascicleLengthWithFrameNumber,
+} from "../fascicle/fascicleModels";
 
 const Chart = () => {
   const { computedFascicleLengths, sampleFascicleLengths } = useAppSelector(
@@ -25,9 +32,23 @@ const Chart = () => {
 
   const { currentTime, duration } = metadata;
 
-  const sampleIds = getFlattenedRenderObjects(sampleFascicleLengths).map(
-    ({ sampleId }) => sampleId
+  const flattenedSampleLengths = getFlattenedRenderObjects(
+    sampleFascicleLengths
+  ) as FascicleLengthWithFrameNumber[];
+
+  const flattenedComputedLengths = getFlattenedRenderObjects(
+    computedFascicleLengths
+  ) as FascicleLengthWithFrameNumber[];
+
+  const sampleIds = flattenedSampleLengths.map(({ sampleId }) => sampleId);
+
+  const shortestDistance = flattenedComputedLengths.reduce(
+    (acc, { point1, point2 }) =>
+      Math.min(getDistanceBetweenPoints(point1, point2), acc),
+    Number.MAX_VALUE
   );
+
+  const chartMinimumY = Math.max(Math.floor(shortestDistance - 30), 0);
 
   const chartOptions = computeChartOptions(
     computedFascicleLengths,
@@ -54,6 +75,11 @@ const Chart = () => {
         color: "black",
         type: "solid",
       },
+    };
+
+    chartOptions.yAxis = {
+      type: "value",
+      min: chartMinimumY,
     };
   }
 

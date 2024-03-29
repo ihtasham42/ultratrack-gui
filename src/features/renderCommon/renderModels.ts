@@ -7,12 +7,11 @@ import { Roi, RoiFrames, RoiWithFrameNumber } from "../roi/roiModels";
 
 export const renderColors: Record<string, string> = {
   "1": "red",
-  "2": "blue",
-  "3": "lime",
-  "4": "purple",
+  "2": "dodgerblue",
+  "3": "magenta",
+  "4": "mediumseagreen",
   "5": "cyan",
-  "6": "pink",
-  "7": "green",
+  "6": "lawngreen",
 };
 
 export type FlattenedResult =

@@ -7,7 +7,7 @@ import {
 } from "../renderCommon/renderUtils";
 import { drawFascicleLength, drawMarkLine, drawRoi } from "./videoService";
 import { MarkMode, MarkPoint } from "./videoModels";
-import { addMarkPoint, setMarkMode } from "./videoSlice";
+import { addMarkPoint, clearMarkPoints } from "./videoSlice";
 import {
   AddSampleFascicleLengthPayload,
   addSampleFascicleLength,
@@ -179,7 +179,7 @@ const CanvasDisplay = () => {
           };
 
           dispatch(addSampleFascicleLength(payload));
-          dispatch(setMarkMode({ mode: MarkMode.DISABLED }));
+          dispatch(clearMarkPoints());
         }
       }
 
@@ -201,7 +201,7 @@ const CanvasDisplay = () => {
             };
 
             dispatch(addSampleRoi(payload));
-            dispatch(setMarkMode({ mode: MarkMode.DISABLED }));
+            dispatch(clearMarkPoints());
           } else {
             dispatch(addMarkPoint({ point }));
           }

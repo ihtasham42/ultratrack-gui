@@ -133,6 +133,9 @@ export const videoSlice = createSlice({
 
       state.mark.points.push(point);
     },
+    clearMarkPoints: (state) => {
+      state.mark.points = [];
+    },
   },
 });
 
@@ -147,6 +150,7 @@ export const {
   removeVideo,
   setMarkMode,
   addMarkPoint,
+  clearMarkPoints,
 } = videoSlice.actions;
 
 export default videoSlice.reducer;
