@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import { fromTimeToFrame } from "./videoUtils";
 import { getRenderColor } from "../renderCommon/renderUtils";
-import { drawFascicleLength, drawRoi } from "./videoService";
+import { drawFascicleLength, drawMarkLine, drawRoi } from "./videoService";
 import { MarkMode, MarkPoint } from "./videoModels";
 import { addMarkPoint, setMarkMode } from "./videoSlice";
 import {
@@ -13,6 +13,7 @@ import { FascicleLengthPoint } from "../fascicle/fascicleModels";
 import { getDistanceBetweenPoints } from "../statistics/statisticsService";
 import { addSampleRoi } from "../roi/roiSlice";
 import { RoiPoint } from "../roi/roiModels";
+import { Box } from "@mantine/core";
 
 const CanvasDisplay = () => {
   const { computedFascicleLengths, sampleFascicleLengths } = useAppSelector(
@@ -21,9 +22,55 @@ const CanvasDisplay = () => {
   const { computedRois, sampleRois } = useAppSelector((state) => state.roi);
   const { metadata, mark } = useAppSelector((state) => state.video);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const markCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [currentMousePos, setCurrentMousePos] = useState<
+    MarkPoint | undefined
+  >();
   const dispatch = useAppDispatch();
 
   const { mode, points } = mark;
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (mode === MarkMode.DISABLED) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      setCurrentMousePos({ x, y });
+    };
+
+    canvas.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      canvas.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [mode, points]);
+
+  useEffect(() => {
+    const canvas = markCanvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (points.length > 0 && currentMousePos) {
+      const mouseMarkPoint: MarkPoint = currentMousePos;
+      console.log(points[points.length - 1] as MarkPoint, mouseMarkPoint);
+      drawMarkLine(
+        ctx,
+        points[points.length - 1] as MarkPoint,
+        mouseMarkPoint,
+        "red"
+      );
+    }
+  }, [currentMousePos, mode, points]);
 
   useEffect(() => {
     if (!metadata) {
@@ -141,7 +188,22 @@ const CanvasDisplay = () => {
   const { currentTime } = metadata;
   const currentFrame = fromTimeToFrame(currentTime);
 
-  return <canvas ref={canvasRef} width={600} height={600} />;
+  return (
+    <Box style={{ position: "relative" }}>
+      <canvas
+        ref={markCanvasRef}
+        width={600}
+        height={600}
+        style={{ position: "absolute", zIndex: 1 }}
+      />
+      <canvas
+        ref={canvasRef}
+        width={600}
+        height={600}
+        style={{ position: "absolute", zIndex: 2 }}
+      />
+    </Box>
+  );
 };
 
 export default CanvasDisplay;

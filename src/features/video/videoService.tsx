@@ -1,6 +1,6 @@
 import { FascicleLengthPoint } from "../fascicle/fascicleModels";
 import { RoiPoint } from "../roi/roiModels";
-import { LINE_WIDTH, POINT_RADIUS } from "./videoModels";
+import { LINE_WIDTH, MarkPoint, POINT_RADIUS } from "./videoModels";
 
 export const drawFascicleLength = (
   ctx: CanvasRenderingContext2D,
@@ -26,6 +26,22 @@ export const drawFascicleLength = (
     ctx.fillStyle = color;
     ctx.fill();
   });
+};
+
+export const drawMarkLine = (
+  ctx: CanvasRenderingContext2D,
+  { x: x1, y: y1 }: MarkPoint,
+  { x: x2, y: y2 }: MarkPoint,
+  color: string
+) => {
+  ctx.setLineDash([15, 10]);
+
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = LINE_WIDTH;
+  ctx.stroke();
 };
 
 export const drawRoi = (
