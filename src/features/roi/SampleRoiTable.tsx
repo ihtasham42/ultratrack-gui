@@ -1,7 +1,7 @@
 import { ActionIcon, Checkbox, Group, Table } from "@mantine/core";
 import SampleColorBadge from "../../common/components/SampleColorBadge";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
-import { removeSampleRoi, setFixedRoi } from "./roiSlice";
+import { removeSampleRoi, setFixedRoi, setVisibleRoi } from "./roiSlice";
 import { IconEye, IconX } from "@tabler/icons-react";
 import { getFlattenedRenderObjects } from "../renderCommon/renderUtils";
 import { RoiWithFrameNumber } from "./roiModels";
@@ -45,7 +45,7 @@ const SampleRoiTable = () => {
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
-        {flattenedRois.map(({ sampleId, frameNumber, fixed }) => (
+        {flattenedRois.map(({ sampleId, frameNumber, fixed, visible }) => (
           <Table.Tr key={sampleId}>
             <Table.Td>
               <SampleColorBadge sampleId={sampleId} />
@@ -60,7 +60,19 @@ const SampleRoiTable = () => {
                 >
                   <IconX />
                 </ActionIcon>
-                <ActionIcon size="sm">
+                <ActionIcon
+                  size="sm"
+                  color={visible ? "blue" : "gray"}
+                  onClick={() =>
+                    dispatch(
+                      setVisibleRoi({
+                        frameNumber,
+                        sampleId,
+                        newValue: !visible,
+                      })
+                    )
+                  }
+                >
                   <IconEye />
                 </ActionIcon>
               </Group>

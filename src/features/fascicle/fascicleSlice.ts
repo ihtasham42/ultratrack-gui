@@ -85,6 +85,7 @@ export const fascicleSlice = createSlice({
         sampleId,
         point1,
         point2,
+        visible: true,
       });
     },
     setVisibleFascicleLength: (

@@ -26,6 +26,12 @@ export interface SetFixedRoiPayload {
   newValue: boolean;
 }
 
+export interface SetVisibleRoiPayload {
+  frameNumber: number;
+  sampleId: string;
+  newValue: boolean;
+}
+
 const initialState: RoiState = {
   computedRois: {},
   sampleRois: {},
@@ -73,6 +79,7 @@ export const roiSlice = createSlice({
         sampleId,
         points,
         fixed: true,
+        visible: true,
       });
     },
     setFixedRoi: (state, action: PayloadAction<SetFixedRoiPayload>) => {
@@ -88,6 +95,19 @@ export const roiSlice = createSlice({
 
       roi.fixed = newValue;
     },
+    setVisibleRoi: (state, action: PayloadAction<SetVisibleRoiPayload>) => {
+      const { frameNumber, sampleId, newValue } = action.payload;
+
+      const frame = state.sampleRois[frameNumber];
+
+      if (!frame) return;
+
+      const roi = frame.find((roi) => roi.sampleId === sampleId);
+
+      if (!roi) return;
+
+      roi.visible = newValue;
+    },
   },
 });
 
@@ -98,6 +118,7 @@ export const {
   clearComputedRois,
   addSampleRoi,
   setFixedRoi,
+  setVisibleRoi,
 } = roiSlice.actions;
 
 export default roiSlice.reducer;

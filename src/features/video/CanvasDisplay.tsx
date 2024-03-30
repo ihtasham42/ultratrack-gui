@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import { fromTimeToFrame } from "./videoUtils";
 import {
   getFirstAvailableSampleId,
+  getFlattenedRenderObjects,
   getRenderColor,
 } from "../renderCommon/renderUtils";
 import { drawFascicleLength, drawMarkLine, drawRoi } from "./videoService";
@@ -12,10 +13,13 @@ import {
   AddSampleFascicleLengthPayload,
   addSampleFascicleLength,
 } from "../fascicle/fascicleSlice";
-import { FascicleLengthPoint } from "../fascicle/fascicleModels";
+import {
+  FascicleLengthPoint,
+  FascicleLengthWithFrameNumber,
+} from "../fascicle/fascicleModels";
 import { getDistanceBetweenPoints } from "../statistics/statisticsService";
 import { addSampleRoi } from "../roi/roiSlice";
-import { RoiPoint } from "../roi/roiModels";
+import { RoiPoint, RoiWithFrameNumber } from "../roi/roiModels";
 import { Box } from "@mantine/core";
 
 const CanvasDisplay = () => {
@@ -118,6 +122,14 @@ const CanvasDisplay = () => {
           return;
         }
 
+        if (
+          flattenedRois.find(
+            (roi) => roi.sampleId === sampleId && roi.visible === false
+          )
+        ) {
+          return;
+        }
+
         const color = getRenderColor(sampleId);
         drawRoi(ctx, points, color);
       });
@@ -129,6 +141,14 @@ const CanvasDisplay = () => {
           lengths === sampleFascicleLengths &&
           computedFascicleLengths[currentFrame]?.find(
             (length) => length.sampleId === sampleId
+          )
+        ) {
+          return;
+        }
+
+        if (
+          flattenedLengths.find(
+            (length) => length.sampleId === sampleId && length.visible === false
           )
         ) {
           return;
@@ -222,6 +242,14 @@ const CanvasDisplay = () => {
 
   const { currentTime } = metadata;
   const currentFrame = fromTimeToFrame(currentTime);
+
+  const flattenedLengths = getFlattenedRenderObjects(
+    sampleFascicleLengths
+  ) as FascicleLengthWithFrameNumber[];
+
+  const flattenedRois = getFlattenedRenderObjects(
+    sampleRois
+  ) as RoiWithFrameNumber[];
 
   return (
     <Box style={{ position: "relative" }}>

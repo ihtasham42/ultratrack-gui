@@ -2,7 +2,10 @@ import { ActionIcon, Group, Table } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "../../common/hooks";
 import { IconEye, IconX } from "@tabler/icons-react";
 import SampleColorBadge from "../../common/components/SampleColorBadge";
-import { removeSampleFascicleLength } from "./fascicleSlice";
+import {
+  removeSampleFascicleLength,
+  setVisibleFascicleLength,
+} from "./fascicleSlice";
 import { getFlattenedRenderObjects } from "../renderCommon/renderUtils";
 import { FascicleLengthWithFrameNumber } from "./fascicleModels";
 
@@ -45,7 +48,19 @@ const SampleFascicleTable = () => {
                 >
                   <IconX />
                 </ActionIcon>
-                <ActionIcon size="sm" color={visible ? "blue" : "gray"}>
+                <ActionIcon
+                  size="sm"
+                  color={visible ? "blue" : "gray"}
+                  onClick={() =>
+                    dispatch(
+                      setVisibleFascicleLength({
+                        frameNumber,
+                        sampleId,
+                        newValue: !visible,
+                      })
+                    )
+                  }
+                >
                   <IconEye />
                 </ActionIcon>
               </Group>
