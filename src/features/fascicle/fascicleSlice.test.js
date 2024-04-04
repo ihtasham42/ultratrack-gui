@@ -43,7 +43,7 @@ describe("fascicleSlice", () => {
   it("should handle removing a sample fascicle length", () => {
     const stateBefore = {
       ...initialState,
-      computedFascicleLengths: {
+      sampleFascicleLengths: {
         ["1"]: [{ ...DEFAULT_FASCICLE_LENGTH, sampleId: "1" }],
       },
     };
@@ -53,7 +53,7 @@ describe("fascicleSlice", () => {
       removeSampleFascicleLength({ sampleId: "1" })
     );
 
-    Object.values(state.computedFascicleLengths).forEach((frame) => {
+    Object.values(state.sampleFascicleLengths).forEach((frame) => {
       expect(frame.find(({ sampleId }) => sampleId === "1")).toBeUndefined();
     });
   });
@@ -71,7 +71,7 @@ describe("fascicleSlice", () => {
     expect(state.sampleFascicleLengths).toStrictEqual({});
   });
 
-  it("should handle clearing the sample fascicle lengths", () => {
+  it("should handle clearing the computed fascicle lengths", () => {
     const stateBefore = {
       ...initialState,
       computedFascicleLengths: {
