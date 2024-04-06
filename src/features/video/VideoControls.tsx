@@ -55,14 +55,24 @@ const VideoControls = () => {
 
   return (
     <Group gap="xs">
-      <ActionIcon onClick={handleStepBackward}>
+      <ActionIcon
+        onClick={handleStepBackward}
+        data-testid="step-backward-button"
+      >
         <IconChevronLeft />
       </ActionIcon>
-      <ActionIcon onClick={handlePlaybackStateChange}>
-        {playbackState === VideoPlaybackState.PLAYING && <IconPlayerPause />}
-        {playbackState === VideoPlaybackState.PAUSED && <IconPlayerPlay />}
+      <ActionIcon
+        onClick={handlePlaybackStateChange}
+        data-testid="playback-button"
+      >
+        {playbackState === VideoPlaybackState.PLAYING && (
+          <IconPlayerPause data-testid="pause-icon" />
+        )}
+        {playbackState === VideoPlaybackState.PAUSED && (
+          <IconPlayerPlay data-testid="play-icon" />
+        )}
       </ActionIcon>
-      <ActionIcon onClick={handleStepForward}>
+      <ActionIcon onClick={handleStepForward} data-testid="step-forward-button">
         <IconChevronRight />
       </ActionIcon>
       <TextInput
