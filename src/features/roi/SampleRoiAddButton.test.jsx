@@ -12,11 +12,9 @@ vi.mock("../../common/hooks", () => ({
   useAppSelector: vi.fn(),
 }));
 
-vi.mock("../renderCommon/CancelMarkButton", () => {
-  return {
-    default: vi.fn(() => <button>Mock Cancel Button</button>),
-  };
-});
+vi.mock("../renderCommon/CancelMarkButton", () => ({
+  default: vi.fn(() => <button>Mock Cancel Button</button>),
+}));
 
 describe("SampleRoiAddButton", () => {
   let dispatchMock;
@@ -41,5 +39,16 @@ describe("SampleRoiAddButton", () => {
     expect(dispatchMock).toHaveBeenCalledWith(
       setMarkMode({ mode: MarkMode.ROI })
     );
+  });
+
+  it("renders the Cancel button when mode is ROI", () => {
+    vi.mocked(useAppSelector).mockReturnValue({
+      mark: { mode: MarkMode.ROI },
+    });
+
+    render(<SampleRoiAddButton />);
+
+    const cancelButton = screen.getByRole("button");
+    expect(cancelButton).toBeInTheDocument();
   });
 });
