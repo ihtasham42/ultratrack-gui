@@ -11,6 +11,8 @@ interface VitestConfig extends UserConfig {
 export default defineConfig({
   plugins: [react()],
   test: {
+    globals: true,
     environment: "jsdom",
+    setupFiles: "./vitest.setup.mjs",
   },
 } as VitestConfig);

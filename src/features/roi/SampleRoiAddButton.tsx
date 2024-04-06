@@ -17,6 +17,7 @@ const SampleRoiAddButton = () => {
       dispatch(setMarkMode({ mode: MarkMode.ROI }));
     }
   };
+
   return mode === MarkMode.ROI ? (
     <CancelMarkButton />
   ) : (
