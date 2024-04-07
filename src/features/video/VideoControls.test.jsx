@@ -9,7 +9,6 @@ import { render } from "../../common/testUtils";
 import { VideoPlaybackState } from "./videoModels";
 
 describe("VideoControls Integration Test", () => {
-  // Helper function to create a pre-configured store for each test
   const renderWithStore = (initialState) => {
     const store = configureStore({
       reducer: {

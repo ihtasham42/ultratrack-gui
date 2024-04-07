@@ -6,6 +6,9 @@ import { IconEye, IconX } from "@tabler/icons-react";
 import { getFlattenedRenderObjects } from "../renderCommon/renderUtils";
 import { RoiWithFrameNumber } from "./roiModels";
 
+const VISIBLE_ENABLED_COLOR = "blue";
+const VISIBLE_DISABLED_COLOR = "gray";
+
 const SampleRoiTable = () => {
   const { sampleRois } = useAppSelector((state) => state.roi);
   const dispatch = useAppDispatch();
@@ -56,13 +59,17 @@ const SampleRoiTable = () => {
                 <ActionIcon
                   size="sm"
                   color="red"
+                  data-testid="remove-button"
                   onClick={() => handleRemoveSampleRoi(sampleId)}
                 >
                   <IconX />
                 </ActionIcon>
                 <ActionIcon
                   size="sm"
-                  color={visible ? "blue" : "gray"}
+                  color={
+                    visible ? VISIBLE_ENABLED_COLOR : VISIBLE_DISABLED_COLOR
+                  }
+                  data-testid="visible-button"
                   onClick={() =>
                     dispatch(
                       setVisibleRoi({
