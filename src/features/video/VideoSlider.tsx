@@ -52,6 +52,7 @@ const VideoSlider = () => {
       style={{ flex: 1 }}
       color="blue"
       value={value}
+      data-testid="video-slider"
     />
   );
 };
