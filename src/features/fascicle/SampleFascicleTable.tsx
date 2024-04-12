@@ -45,6 +45,7 @@ const SampleFascicleTable = () => {
                   size="sm"
                   color="red"
                   onClick={() => handleRemoveSampleFascicleLength(sampleId)}
+                  data-testid="remove-button"
                 >
                   <IconX />
                 </ActionIcon>
@@ -60,6 +61,7 @@ const SampleFascicleTable = () => {
                       })
                     )
                   }
+                  data-testid="visible-button"
                 >
                   <IconEye />
                 </ActionIcon>

@@ -9,10 +9,7 @@ import { fromTimeToFrame } from "../video/videoUtils";
 import NoDataChart from "./NoDataChart";
 import { getFlattenedRenderObjects } from "../renderCommon/renderUtils";
 import { useMemo } from "react";
-import {
-  FascicleLength,
-  FascicleLengthWithFrameNumber,
-} from "../fascicle/fascicleModels";
+import { FascicleLengthWithFrameNumber } from "../fascicle/fascicleModels";
 
 const Chart = () => {
   const { computedFascicleLengths, sampleFascicleLengths } = useAppSelector(
@@ -84,7 +81,7 @@ const Chart = () => {
   }
 
   return (
-    <Box h={300}>
+    <Box h={300} data-testid="chart">
       {computedLengths.length > 0 ? (
         <ReactECharts notMerge option={chartOptions} style={{ height: 300 }} />
       ) : (

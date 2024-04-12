@@ -1,4 +1,4 @@
-import { Box, Group, Stack, Text, Title } from "@mantine/core";
+import { Group, Stack, Text, Title } from "@mantine/core";
 
 const NoDataChart = () => {
   return (

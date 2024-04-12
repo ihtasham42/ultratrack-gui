@@ -9,7 +9,9 @@ import { IconX } from "@tabler/icons-react";
 import { computeVideo } from "./managerSlice";
 
 const ManagerContainer = () => {
-  const { loading, error } = useAppSelector((state) => state.manager);
+  const state = useAppSelector((state) => state.manager);
+  const { loading, error } = state;
+
   const dispatch = useAppDispatch();
 
   const handleClearData = () => {
@@ -34,6 +36,7 @@ const ManagerContainer = () => {
             size="compact-sm"
             loading={loading}
             onClick={handleComputeVideo}
+            data-testid="compute-video-button"
           >
             Compute Video
           </Button>
@@ -42,6 +45,7 @@ const ManagerContainer = () => {
             loading={loading}
             color="red"
             onClick={handleClearData}
+            data-testid="clear-data-button"
           >
             Clear Data
           </Button>
@@ -52,6 +56,7 @@ const ManagerContainer = () => {
           color="red"
           title="An error has occured"
           icon={<IconX />}
+          data-testid="error-alert"
         />
       )}
     </Card>

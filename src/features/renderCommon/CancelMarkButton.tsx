@@ -11,7 +11,12 @@ const CancelMarkButton = () => {
   };
 
   return (
-    <Button color="red" size="compact-sm" onClick={handleClick}>
+    <Button
+      color="red"
+      size="compact-sm"
+      onClick={handleClick}
+      data-testid="cancel-mark-button"
+    >
       x Cancel
     </Button>
   );
